@@ -1,8 +1,8 @@
-defmodule Billing.Service.SignService do
+defmodule BillingCore.Service.SignService do
   @moduledoc false
 
-  alias Billing.Service.P12Service
-  alias Billing.Xbes
+  alias BillingCore.Service.P12Service
+  alias BillingCore.Xbes
 
   def sign(xml, p12_path, p12_password) do
     signing_time =

@@ -1,4 +1,4 @@
-defmodule Billing.Xbes.SignedInfo.Doc do
+defmodule BillingCore.Xbes.SignedInfo.Doc do
   @moduledoc false
 
   def digest(xml) do

@@ -1,11 +1,11 @@
-Mox.defmock(Billing.Ws.ClientMock, for: Billing.Ws.ClientBehaviour)
+Mox.defmock(BillingCore.Ws.ClientMock, for: BillingCore.Ws.ClientBehaviour)
 
 # Mimic Mocks
-# Mimic.copy(Billing.Service.SignService)
-Mimic.copy(Billing.Ws.Reception)
-Mimic.copy(Billing.Crypto)
-Mimic.copy(Billing.Ws.Client)
+# Mimic.copy(BillingCore.Service.SignService)
+Mimic.copy(BillingCore.Ws.Reception)
+Mimic.copy(BillingCore.Crypto)
+Mimic.copy(BillingCore.Ws.Client)
 
-# Mimic.copy(Billing.Service.FacturaService)
-Mimic.copy(Billing.Ws.Authorization)
-# Mimic.copy(Billing.Service.UploadService)
+# Mimic.copy(BillingCore.Service.FacturaService)
+Mimic.copy(BillingCore.Ws.Authorization)
+# Mimic.copy(BillingCore.Service.UploadService)

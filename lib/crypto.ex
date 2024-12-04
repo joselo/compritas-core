@@ -1,4 +1,4 @@
-defmodule Billing.Crypto do
+defmodule BillingCore.Crypto do
   @moduledoc """
   Provides functions to encrypt and decrypt base_64 encoded tokens with
   AES in GCM algorithm, accept an optional timer if expiration minutes are given.

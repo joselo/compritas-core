@@ -1,4 +1,4 @@
-defmodule Billing.Dataset.Factura.TotalImpuesto do
+defmodule BillingCore.Dataset.Factura.TotalImpuesto do
   @moduledoc false
 
   @decimals Application.compile_env(:billing, :decimals, 2)
@@ -19,7 +19,7 @@ defmodule Billing.Dataset.Factura.TotalImpuesto do
     |> validate_required([:codigo, :codigo_porcentaje, :base_imponible, :valor])
   end
 
-  def to_doc(%Billing.Dataset.Factura.TotalImpuesto{} = total_impuesto, decimals \\ @decimals) do
+  def to_doc(%BillingCore.Dataset.Factura.TotalImpuesto{} = total_impuesto, decimals \\ @decimals) do
     {
       :totalImpuesto,
       nil,
@@ -33,7 +33,7 @@ defmodule Billing.Dataset.Factura.TotalImpuesto do
     }
   end
 
-  def to_xml(%Billing.Dataset.Factura.TotalImpuesto{} = total_impuesto) do
+  def to_xml(%BillingCore.Dataset.Factura.TotalImpuesto{} = total_impuesto) do
     to_doc(total_impuesto)
     |> XmlBuilder.generate()
   end

@@ -1,4 +1,4 @@
-defmodule Billing.AuthorizationParser do
+defmodule BillingCore.AuthorizationParser do
   import SweetXml
 
   def parse_response(response) do

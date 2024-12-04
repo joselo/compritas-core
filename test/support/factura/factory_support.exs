@@ -1,7 +1,7 @@
-defmodule Billing.Dataset.Factura.Test.FactorySupport do
-  alias Billing.Dataset.Factura
+defmodule BillingCore.Dataset.Factura.Test.FactorySupport do
+  alias BillingCore.Dataset.Factura
 
-  alias Billing.Dataset.Factura.{
+  alias BillingCore.Dataset.Factura.{
     CampoAdicional,
     DetAdicional,
     Detalle,
@@ -12,7 +12,7 @@ defmodule Billing.Dataset.Factura.Test.FactorySupport do
     TotalImpuesto
   }
 
-  alias Billing.Dataset.ClaveAcceso
+  alias BillingCore.Dataset.ClaveAcceso
 
   def info_tributaria_factory do
     %InfoTributaria{

@@ -1,16 +1,16 @@
-defmodule Billing.XbesBehaviour do
+defmodule BillingCore.XbesBehaviour do
   @moduledoc false
   @callback get_cfg(String.t(), String.t(), String.t()) :: struct()
 end
 
-defmodule Billing.Xbes do
+defmodule BillingCore.Xbes do
   @moduledoc false
-  @behaviour Billing.XbesBehaviour
+  @behaviour BillingCore.XbesBehaviour
 
-  alias Billing.Xbes.Signature
-  alias Billing.Xbes.SignedInfo
-  alias Billing.Xbes.SignedInfo.{Doc, KeyInfo, Properties}
-  alias Billing.Xbes.{Cfg, P12.Certificate, P12.Key}
+  alias BillingCore.Xbes.Signature
+  alias BillingCore.Xbes.SignedInfo
+  alias BillingCore.Xbes.SignedInfo.{Doc, KeyInfo, Properties}
+  alias BillingCore.Xbes.{Cfg, P12.Certificate, P12.Key}
 
   def sign(
         xml,
@@ -50,7 +50,7 @@ defmodule Billing.Xbes do
       |> XmlBuilder.generate(format: :none)
 
     # Result Merged
-    {:ok, Billing.Xbes.merge(xml, signature)}
+    {:ok, BillingCore.Xbes.merge(xml, signature)}
   end
 
   def merge(doc, signature) do

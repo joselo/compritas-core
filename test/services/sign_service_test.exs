@@ -1,7 +1,7 @@
-defmodule Billing.Service.SignServiceTest do
+defmodule BillingCore.Service.SignServiceTest do
   use ExUnit.Case
 
-  alias Billing.Service.SignService
+  alias BillingCore.Service.SignService
 
   setup do
     xml = File.read!("test/fixtures/xml.xml")

@@ -1,11 +1,11 @@
-defmodule Billing.ReceptionTest do
+defmodule BillingCore.ReceptionTest do
   use ExUnit.Case
 
   import Mox
 
   setup :verify_on_exit!
 
-  alias Billing.Ws
+  alias BillingCore.Ws
 
   @environment 1
 

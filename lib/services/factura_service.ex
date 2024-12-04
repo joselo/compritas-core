@@ -1,7 +1,7 @@
-defmodule Billing.Service.FacturaService do
+defmodule BillingCore.Service.FacturaService do
   @moduledoc false
 
-  alias Billing.Dataset.Factura
+  alias BillingCore.Dataset.Factura
 
   def build(factura_params) do
     case validate_invoice(factura_params) do

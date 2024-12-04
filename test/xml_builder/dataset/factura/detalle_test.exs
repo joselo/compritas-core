@@ -1,15 +1,15 @@
-defmodule Billing.Dataset.Factura.DetalleTest do
+defmodule BillingCore.Dataset.Factura.DetalleTest do
   use ExUnit.Case
 
-  alias Billing.Dataset.Factura.Test.FactorySupport
+  alias BillingCore.Dataset.Factura.Test.FactorySupport
 
-  alias Billing.Dataset.Factura.{
+  alias BillingCore.Dataset.Factura.{
     DetAdicional,
     Detalle,
     Impuesto
   }
 
-  alias Billing.Dataset.Test.XmlSupport
+  alias BillingCore.Dataset.Test.XmlSupport
 
   setup do
     detalle = FactorySupport.detalle_factory()

@@ -1,11 +1,11 @@
-defmodule Billing.CallbackTest do
+defmodule BillingCore.CallbackTest do
   use ExUnit.Case
 
   import Mox
 
   setup :verify_on_exit!
 
-  alias Billing.Ws
+  alias BillingCore.Ws
 
   setup do
     success_response = "Shop Succes"

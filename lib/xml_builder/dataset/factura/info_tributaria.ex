@@ -1,11 +1,11 @@
-defmodule Billing.Dataset.Factura.InfoTributaria do
+defmodule BillingCore.Dataset.Factura.InfoTributaria do
   @moduledoc false
 
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Billing.Dataset.ClaveAcceso
-  alias Billing.Dataset.ClaveAcceso.DigitoVerificador
+  alias BillingCore.Dataset.ClaveAcceso
+  alias BillingCore.Dataset.ClaveAcceso.DigitoVerificador
 
   embedded_schema do
     field(:ambiente, :integer)
@@ -53,7 +53,7 @@ defmodule Billing.Dataset.Factura.InfoTributaria do
     |> generate_clave_acceso()
   end
 
-  def to_doc(%Billing.Dataset.Factura.InfoTributaria{} = info_tributaria) do
+  def to_doc(%BillingCore.Dataset.Factura.InfoTributaria{} = info_tributaria) do
     cod_doc = info_tributaria.cod_doc |> Integer.to_string() |> String.pad_leading(2, "0")
     estab = info_tributaria.estab |> Integer.to_string() |> String.pad_leading(3, "0")
     pto_emi = info_tributaria.pto_emi |> Integer.to_string() |> String.pad_leading(3, "0")
@@ -78,7 +78,7 @@ defmodule Billing.Dataset.Factura.InfoTributaria do
     }
   end
 
-  def to_xml(%Billing.Dataset.Factura.InfoTributaria{} = info_tributaria) do
+  def to_xml(%BillingCore.Dataset.Factura.InfoTributaria{} = info_tributaria) do
     to_doc(info_tributaria)
     |> XmlBuilder.generate()
   end

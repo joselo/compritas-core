@@ -1,4 +1,4 @@
-defmodule Billing.DataCase do
+defmodule BillingCore.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -10,7 +10,7 @@ defmodule Billing.DataCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use Billing.DataCase, async: true`, although
+  by setting `use BillingCore.DataCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -18,19 +18,19 @@ defmodule Billing.DataCase do
 
   using do
     quote do
-      use Oban.Testing, repo: Billing.Repo
+      use Oban.Testing, repo: BillingCore.Repo
 
-      alias Billing.Repo
+      alias BillingCore.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Billing.DataCase
+      import BillingCore.DataCase
     end
   end
 
   setup tags do
-    Billing.DataCase.setup_sandbox(tags)
+    BillingCore.DataCase.setup_sandbox(tags)
     :ok
   end
 
@@ -38,7 +38,7 @@ defmodule Billing.DataCase do
   Sets up the sandbox based on the test tags.
   """
   def setup_sandbox(tags) do
-    pid = Ecto.Adapters.SQL.Sandbox.start_owner!(Billing.Repo, shared: not tags[:async])
+    pid = Ecto.Adapters.SQL.Sandbox.start_owner!(BillingCore.Repo, shared: not tags[:async])
     on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
   end
 

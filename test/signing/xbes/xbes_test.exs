@@ -1,18 +1,18 @@
-defmodule Billing.XbesTest do
+defmodule BillingCore.XbesTest do
   use ExUnit.Case
 
   import Mox
 
   setup :verify_on_exit!
 
-  alias Billing.Xbes.SignedInfo
-  alias Billing.Xbes.SignedInfo.{Doc, KeyInfo, Properties}
-  alias Billing.Xbes.{Cfg, P12.Certificate, P12.Key}
-  alias Billing.Xbes.Signature
+  alias BillingCore.Xbes.SignedInfo
+  alias BillingCore.Xbes.SignedInfo.{Doc, KeyInfo, Properties}
+  alias BillingCore.Xbes.{Cfg, P12.Certificate, P12.Key}
+  alias BillingCore.Xbes.Signature
 
   setup do
-    # Mox.defmock(Billing.XbesMock, for: Billing.XbesBehaviour)
-    # Application.put_env(:billing, :cfg, Billing.XbesMock)
+    # Mox.defmock(BillingCore.XbesMock, for: BillingCore.XbesBehaviour)
+    # Application.put_env(:billing, :cfg, BillingCore.XbesMock)
 
     xml =
       File.read!("test/fixtures/xml.xml")
@@ -79,7 +79,7 @@ defmodule Billing.XbesTest do
       |> XmlBuilder.generate(format: :none)
 
     # Output
-    Billing.Xbes.merge(xml, signature)
+    BillingCore.Xbes.merge(xml, signature)
   end
 
   test "sign", %{
@@ -89,9 +89,9 @@ defmodule Billing.XbesTest do
     key_pem: key_pem,
     signing_time: signing_time
   } do
-    # Billing.XbesMock
+    # BillingCore.XbesMock
     # |> expect(:get_cfg, fn _crt, _signing_time, _signed_data_description -> cfg end)
 
-    assert {:ok, _signed} = Billing.Xbes.sign(xml, crt_pem, key_pem, signing_time)
+    assert {:ok, _signed} = BillingCore.Xbes.sign(xml, crt_pem, key_pem, signing_time)
   end
 end

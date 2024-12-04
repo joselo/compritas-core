@@ -8,7 +8,7 @@ defmodule Dataset do
 
   ## Examples
 
-      iex> Billing.Dataset.hello()
+      iex> BillingCore.Dataset.hello()
       :world
 
   """

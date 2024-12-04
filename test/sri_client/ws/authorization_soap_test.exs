@@ -1,8 +1,8 @@
-defmodule Billing.AuthorizationSoapTest do
+defmodule BillingCore.AuthorizationSoapTest do
   use ExUnit.Case
 
-  alias Billing.Dataset.Test.XmlSupport
-  alias Billing.Ws
+  alias BillingCore.Dataset.Test.XmlSupport
+  alias BillingCore.Ws
 
   setup do
     clave_acceso = "123456789"

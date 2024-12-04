@@ -1,8 +1,8 @@
-defmodule Billing.Ws.Client do
+defmodule BillingCore.Ws.Client do
   require Logger
 
   @moduledoc false
-  @behaviour Billing.Ws.ClientBehaviour
+  @behaviour BillingCore.Ws.ClientBehaviour
 
   def post(wsdl_url, body) do
     headers = [

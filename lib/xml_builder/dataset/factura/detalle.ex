@@ -1,9 +1,9 @@
-defmodule Billing.Dataset.Factura.Detalle do
+defmodule BillingCore.Dataset.Factura.Detalle do
   @moduledoc false
 
   @decimals Application.compile_env(:billing, :decimals, 2)
 
-  alias Billing.Dataset.Factura.{DetAdicional, Impuesto}
+  alias BillingCore.Dataset.Factura.{DetAdicional, Impuesto}
 
   use Ecto.Schema
   import Ecto.Changeset
@@ -45,7 +45,7 @@ defmodule Billing.Dataset.Factura.Detalle do
     |> cast_embed(:impuestos, required: true, with: &Impuesto.changeset/2)
   end
 
-  def to_doc(%Billing.Dataset.Factura.Detalle{} = detalle, decimals \\ @decimals) do
+  def to_doc(%BillingCore.Dataset.Factura.Detalle{} = detalle, decimals \\ @decimals) do
     {
       :detalle,
       nil,
@@ -65,7 +65,7 @@ defmodule Billing.Dataset.Factura.Detalle do
     }
   end
 
-  def to_xml(%Billing.Dataset.Factura.Detalle{} = detalle) do
+  def to_xml(%BillingCore.Dataset.Factura.Detalle{} = detalle) do
     to_doc(detalle)
     |> XmlBuilder.generate()
   end

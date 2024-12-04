@@ -1,10 +1,10 @@
-defmodule Billing.Dataset.Factura.CampoAdicionalTest do
+defmodule BillingCore.Dataset.Factura.CampoAdicionalTest do
   use ExUnit.Case
 
-  alias Billing.Dataset.Factura.CampoAdicional
+  alias BillingCore.Dataset.Factura.CampoAdicional
 
-  alias Billing.Dataset.Factura.Test.FactorySupport
-  alias Billing.Dataset.Test.XmlSupport
+  alias BillingCore.Dataset.Factura.Test.FactorySupport
+  alias BillingCore.Dataset.Test.XmlSupport
 
   setup do
     campo_adicional = FactorySupport.campo_adicional_factory()

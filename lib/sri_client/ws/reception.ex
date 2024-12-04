@@ -1,8 +1,8 @@
-defmodule Billing.Ws.Reception do
+defmodule BillingCore.Ws.Reception do
   @moduledoc false
 
-  alias Billing.Ws
-  alias Billing.ReceptionParser
+  alias BillingCore.Ws
+  alias BillingCore.ReceptionParser
 
   def send(xml, environment) do
     params = Ws.ReceptionSoap.create_request(xml, :validarComprobante)

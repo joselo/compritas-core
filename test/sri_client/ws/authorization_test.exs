@@ -1,9 +1,9 @@
-defmodule Billing.AuthorizationTest do
+defmodule BillingCore.AuthorizationTest do
   use ExUnit.Case
 
   import Mox
   setup :verify_on_exit!
-  alias Billing.Ws
+  alias BillingCore.Ws
 
   @environment 1
 

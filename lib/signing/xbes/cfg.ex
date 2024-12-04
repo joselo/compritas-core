@@ -1,4 +1,4 @@
-defmodule Billing.Xbes.Cfg do
+defmodule BillingCore.Xbes.Cfg do
   @moduledoc false
 
   @enforce_keys [

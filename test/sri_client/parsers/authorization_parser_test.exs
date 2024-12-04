@@ -1,7 +1,7 @@
-defmodule Billing.AuthorizationParserTest do
+defmodule BillingCore.AuthorizationParserTest do
   use ExUnit.Case
 
-  alias Billing.AuthorizationParser
+  alias BillingCore.AuthorizationParser
 
   setup do
     success_response = File.read!("test/fixtures/success_authorization_response.xml")

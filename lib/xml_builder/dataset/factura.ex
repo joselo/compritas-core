@@ -1,7 +1,7 @@
-defmodule Billing.Dataset.Factura do
+defmodule BillingCore.Dataset.Factura do
   @moduledoc false
 
-  alias Billing.Dataset.Factura.{
+  alias BillingCore.Dataset.Factura.{
     CampoAdicional,
     Detalle,
     InfoFactura,
@@ -28,7 +28,7 @@ defmodule Billing.Dataset.Factura do
     |> cast_embed(:info_adicional, required: true, with: &CampoAdicional.changeset/2)
   end
 
-  def to_doc(%Billing.Dataset.Factura{} = factura) do
+  def to_doc(%BillingCore.Dataset.Factura{} = factura) do
     {
       :factura,
       %{id: "comprobante", version: "1.0.0"},
@@ -41,7 +41,7 @@ defmodule Billing.Dataset.Factura do
     }
   end
 
-  def to_xml(%Billing.Dataset.Factura{} = factura) do
+  def to_xml(%BillingCore.Dataset.Factura{} = factura) do
     XmlBuilder.document(to_doc(factura))
     |> XmlBuilder.generate()
   end

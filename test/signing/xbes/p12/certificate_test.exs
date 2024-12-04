@@ -1,7 +1,7 @@
-defmodule Billing.Xbes.CertificateTest do
+defmodule BillingCore.Xbes.CertificateTest do
   use ExUnit.Case
 
-  alias Billing.Xbes.P12.Certificate
+  alias BillingCore.Xbes.P12.Certificate
 
   setup do
     pem_file = File.read!("test/fixtures/cert.pem")

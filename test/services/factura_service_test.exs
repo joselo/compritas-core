@@ -1,7 +1,7 @@
-defmodule Billing.Service.FacturaServiceTest do
+defmodule BillingCore.Service.FacturaServiceTest do
   use ExUnit.Case
 
-  alias Billing.Service.FacturaService
+  alias BillingCore.Service.FacturaService
 
   describe "build/4" do
     test "build invoice and starts the sign xml worker" do

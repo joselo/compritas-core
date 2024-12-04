@@ -1,4 +1,4 @@
-defmodule Billing.Ws.Callback do
+defmodule BillingCore.Ws.Callback do
   require Logger
 
   @moduledoc false

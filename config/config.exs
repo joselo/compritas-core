@@ -1,6 +1,6 @@
 import Config
 
-# Billing
+# BillingCore
 config :billing_core,
   decimals: 2,
   reception_url:
@@ -15,7 +15,7 @@ config :billing_core,
   soap_server_recv_timeout: 900_000,
   timeout: 900_000,
   crypto_key: "lVPevoQt_xR5X7oMuHqTfSmLlHtTCQ4dZZJasS_cFMw=",
-  client: Billing.Ws.ClientMock,
+  client: BillingCore.Ws.ClientMock,
   open_ssl_legacy: true,
   timezone: "America/Guayaquil",
   test_p12_password: System.get_env("TEST_P12_FILE_PASSWORD")

@@ -1,8 +1,8 @@
-defmodule Billing.Ws.Authorization do
+defmodule BillingCore.Ws.Authorization do
   @moduledoc false
 
-  alias Billing.Ws
-  alias Billing.AuthorizationParser
+  alias BillingCore.Ws
+  alias BillingCore.AuthorizationParser
 
   def send(clave_acceso, environment) when is_binary(clave_acceso) and is_integer(environment) do
     params = Ws.AuthorizationSoap.create_request(clave_acceso, :autorizacionComprobante)

@@ -1,4 +1,4 @@
-defmodule Billing.Ws.AuthorizationSoap do
+defmodule BillingCore.Ws.AuthorizationSoap do
   @moduledoc false
 
   def create_request(clave_acceso, operation)

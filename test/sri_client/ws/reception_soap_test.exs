@@ -1,8 +1,8 @@
-defmodule Billing.SoapTest do
+defmodule BillingCore.SoapTest do
   use ExUnit.Case
 
-  alias Billing.Dataset.Test.XmlSupport
-  alias Billing.Ws
+  alias BillingCore.Dataset.Test.XmlSupport
+  alias BillingCore.Ws
 
   setup do
     xml = "<xml />"

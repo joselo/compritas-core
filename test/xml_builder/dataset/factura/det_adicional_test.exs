@@ -1,10 +1,10 @@
-defmodule Billing.Dataset.Factura.DetAdicionalTest do
+defmodule BillingCore.Dataset.Factura.DetAdicionalTest do
   use ExUnit.Case
 
-  alias Billing.Dataset.Factura.DetAdicional
+  alias BillingCore.Dataset.Factura.DetAdicional
 
-  alias Billing.Dataset.Factura.Test.FactorySupport
-  alias Billing.Dataset.Test.XmlSupport
+  alias BillingCore.Dataset.Factura.Test.FactorySupport
+  alias BillingCore.Dataset.Test.XmlSupport
 
   setup do
     det_adicional = FactorySupport.det_adicional_factory()

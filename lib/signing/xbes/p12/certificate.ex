@@ -1,4 +1,4 @@
-defmodule Billing.Xbes.P12.Certificate do
+defmodule BillingCore.Xbes.P12.Certificate do
   @moduledoc false
 
   # TODO: Write tests

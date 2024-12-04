@@ -1,4 +1,4 @@
-defmodule Billing.Dataset.Factura.Pago do
+defmodule BillingCore.Dataset.Factura.Pago do
   @moduledoc false
 
   @decimals Application.compile_env(:billing, :decimals, 2)
@@ -19,7 +19,7 @@ defmodule Billing.Dataset.Factura.Pago do
     |> validate_required([:forma_pago, :total, :plazo, :unidad_tiempo])
   end
 
-  def to_doc(key, %Billing.Dataset.Factura.Pago{} = pago, decimals \\ @decimals)
+  def to_doc(key, %BillingCore.Dataset.Factura.Pago{} = pago, decimals \\ @decimals)
       when is_atom(key) do
     {
       key,
@@ -33,7 +33,7 @@ defmodule Billing.Dataset.Factura.Pago do
     }
   end
 
-  def to_xml(key, %Billing.Dataset.Factura.Pago{} = pago) when is_atom(key) do
+  def to_xml(key, %BillingCore.Dataset.Factura.Pago{} = pago) when is_atom(key) do
     to_doc(key, pago)
     |> XmlBuilder.generate()
   end

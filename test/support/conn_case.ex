@@ -23,7 +23,7 @@ defmodule BillingWeb.ConnCase do
       @endpoint BillingWeb.Endpoint
 
       use BillingWeb, :verified_routes
-      use Oban.Testing, repo: Billing.Repo
+      use Oban.Testing, repo: BillingCore.Repo
 
       # Import conveniences for testing with connections
       import Plug.Conn
@@ -33,7 +33,7 @@ defmodule BillingWeb.ConnCase do
   end
 
   setup tags do
-    Billing.DataCase.setup_sandbox(tags)
+    BillingCore.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end

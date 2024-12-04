@@ -1,7 +1,7 @@
-defmodule Billing.Xbes.Signature do
+defmodule BillingCore.Xbes.Signature do
   @moduledoc false
 
-  alias Billing.Xbes.Util
+  alias BillingCore.Xbes.Util
 
   def get(cfg, signed_info, signature_value, key_info, properties) do
     id = "Signature#{cfg.signature_number}"

@@ -1,4 +1,4 @@
-defmodule Billing.Dataset.ChangesetHelper do
+defmodule BillingCore.Dataset.ChangesetHelper do
   @moduledoc false
 
   def changeset_error_to_string(changeset) do

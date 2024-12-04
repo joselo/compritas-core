@@ -1,10 +1,10 @@
-defmodule Billing.Dataset.Factura.PagoTest do
+defmodule BillingCore.Dataset.Factura.PagoTest do
   use ExUnit.Case
 
-  alias Billing.Dataset.Factura.Pago
+  alias BillingCore.Dataset.Factura.Pago
 
-  alias Billing.Dataset.Factura.Test.FactorySupport
-  alias Billing.Dataset.Test.XmlSupport
+  alias BillingCore.Dataset.Factura.Test.FactorySupport
+  alias BillingCore.Dataset.Test.XmlSupport
 
   setup do
     pago = FactorySupport.pago_factory()

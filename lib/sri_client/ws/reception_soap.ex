@@ -1,4 +1,4 @@
-defmodule Billing.Ws.ReceptionSoap do
+defmodule BillingCore.Ws.ReceptionSoap do
   @moduledoc false
 
   def create_request(xml, operation)

@@ -1,7 +1,7 @@
-defmodule Billing.Service.P12ServiceTest do
+defmodule BillingCore.Service.P12ServiceTest do
   use ExUnit.Case
 
-  alias Billing.Service
+  alias BillingCore.Service
 
   setup do
     path =

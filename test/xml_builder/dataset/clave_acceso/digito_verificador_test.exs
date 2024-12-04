@@ -1,7 +1,7 @@
-defmodule Billing.Dataset.ClaveAcceso.DigitoVerificadorTest do
+defmodule BillingCore.Dataset.ClaveAcceso.DigitoVerificadorTest do
   use ExUnit.Case
 
-  alias Billing.Dataset.ClaveAcceso.DigitoVerificador
+  alias BillingCore.Dataset.ClaveAcceso.DigitoVerificador
 
   setup do
     {:ok, fecha_emision} = Date.new(2020, 2, 3)
