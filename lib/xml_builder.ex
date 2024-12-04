@@ -1,9 +1,9 @@
-defmodule BillingCore.Service.FacturaService do
+defmodule BillingCore.XmlBuilder do
   @moduledoc false
 
   alias BillingCore.Dataset.Factura
 
-  def build(factura_params) do
+  def build_invoice(factura_params) do
     case validate_invoice(factura_params) do
       {:ok, factura} ->
         {:ok, [xml: Factura.to_xml(factura), clave_acceso: factura.info_tributaria.clave_acceso]}

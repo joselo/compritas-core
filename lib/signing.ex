@@ -1,7 +1,7 @@
-defmodule BillingCore.Service.SignService do
+defmodule BillingCore.Signing do
   @moduledoc false
 
-  alias BillingCore.Service.P12Service
+  alias BillingCore.P12Reader
   alias BillingCore.Xbes
 
   def sign(xml, p12_path, p12_password) do
@@ -10,7 +10,7 @@ defmodule BillingCore.Service.SignService do
       |> Timex.now()
       |> Timex.format!("%FT%T%:z", :strftime)
 
-    case P12Service.read(p12_path, p12_password) do
+    case P12Reader.read(p12_path, p12_password) do
       {:ok, cert, rsa} ->
         Xbes.sign(xml, cert, rsa, signing_time)
 

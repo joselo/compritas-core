@@ -1,15 +1,15 @@
-defmodule BillingCore.Service.FacturaServiceTest do
+defmodule BillingCore.XmlBuilderTest do
   use ExUnit.Case
 
-  alias BillingCore.Service.FacturaService
+  alias BillingCore.XmlBuilder
 
-  describe "build/4" do
+  describe "build_invoice/1" do
     test "build invoice and starts the sign xml worker" do
       factura_params = get_factura_params()
       clave_acceso_expected = "0302202001123456789000110010010000000010000000112"
 
       assert {:ok, [xml: xml, clave_acceso: clave_acceso]} =
-               FacturaService.build(factura_params)
+               XmlBuilder.build_invoice(factura_params)
 
       assert clave_acceso == clave_acceso_expected
       assert xml
@@ -17,7 +17,7 @@ defmodule BillingCore.Service.FacturaServiceTest do
 
     test "doesn't build the invoice and return errors" do
       assert {:error, _error} =
-               FacturaService.build(%{})
+               XmlBuilder.build_invoice(%{})
     end
   end
 

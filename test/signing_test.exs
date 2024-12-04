@@ -1,7 +1,7 @@
-defmodule BillingCore.Service.SignServiceTest do
+defmodule BillingCore.Service.SigningTest do
   use ExUnit.Case
 
-  alias BillingCore.Service.SignService
+  alias BillingCore.Signing
 
   setup do
     xml = File.read!("test/fixtures/xml.xml")
@@ -17,14 +17,14 @@ defmodule BillingCore.Service.SignServiceTest do
       p12_password: p12_password,
       p12_path: p12_path
     } do
-      assert {:ok, _xml} = SignService.sign(xml, p12_path, p12_password)
+      assert {:ok, _xml} = Signing.sign(xml, p12_path, p12_password)
     end
 
     test "do not sign the with wrong plain password", %{
       xml: xml,
       p12_path: p12_path
     } do
-      assert {:error, _xml} = SignService.sign(xml, p12_path, "bad-pass")
+      assert {:error, _xml} = Signing.sign(xml, p12_path, "bad-pass")
     end
 
     test "sign the xml with encrypted password successfully", %{
@@ -33,7 +33,7 @@ defmodule BillingCore.Service.SignServiceTest do
       p12_path: p12_path
     } do
       assert {:ok, _xml} =
-               SignService.sign(xml, p12_path, p12_password)
+               Signing.sign(xml, p12_path, p12_password)
     end
   end
 end

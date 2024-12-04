@@ -1,4 +1,4 @@
-defmodule BillingCore.Service.P12Service do
+defmodule BillingCore.P12Reader do
   @moduledoc false
 
   def read(path, password) do
