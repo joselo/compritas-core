@@ -1,0 +1,8 @@
+<soapenv:Envelope xmlns:ec="http://ec.gob.sri.ws.recepcion" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+  <soapenv:Header/>
+  <soapenv:Body>
+    <ec:validarComprobante>
+      <xml>PHhtbCAvPg==</xml>
+    </ec:validarComprobante>
+  </soapenv:Body>
+</soapenv:Envelope>

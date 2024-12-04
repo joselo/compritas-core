@@ -1,0 +1,6 @@
+<pago>
+  <formaPago>20</formaPago>
+  <total>3000.00</total>
+  <plazo>15</plazo>
+  <unidadTiempo>Dias</unidadTiempo>
+</pago>

@@ -1,0 +1,79 @@
+defmodule Billing.Ws.Client do
+  require Logger
+
+  @moduledoc false
+  @behaviour Billing.Ws.ClientBehaviour
+
+  def post(wsdl_url, body) do
+    headers = [
+      {"Content-Encoding", "gzip"},
+      {"Content-Type", "text/xml;charset=UTF-8"},
+      {"Accept-Encoding", "gzip,deflate"},
+      {"Vary", "Accept-Encoding"}
+    ]
+
+    HTTPoison.post(wsdl_url, body, headers,
+      timeout: get_timeout(),
+      recv_timeout: get_recv_timeout()
+    )
+    |> handle_response()
+  end
+
+  def put(url, params) do
+    headers = [
+      {"Content-Type", "application/x-www-form-urlencoded"}
+    ]
+
+    body = URI.encode_query(params)
+
+    HTTPoison.put(url, body, headers,
+      timeout: get_timeout(),
+      recv_timeout: get_recv_timeout()
+    )
+    |> handle_response
+  end
+
+  defp handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body, headers: headers}}) do
+    {:ok, unzip_body(body, headers)}
+  end
+
+  # Catch-all for other status codes
+  defp handle_response({:ok, %HTTPoison.Response{status_code: _, body: body, headers: headers}}) do
+    {:error, unzip_body(body, headers)}
+  end
+
+  # Handle connection timeout
+  defp handle_response({:error, %HTTPoison.Error{reason: :timeout}}) do
+    {:error, "Request timed out"}
+  end
+
+  # Handle connection refused or DNS issues
+  defp handle_response({:error, %HTTPoison.Error{reason: :connect_timeout}}) do
+    {:error, "Connection timed out"}
+  end
+
+  # Handle other errors like `:nxdomain`, `:closed`, etc.
+  defp handle_response({:error, %HTTPoison.Error{reason: reason}}) do
+    {:error, "Request failed due to: #{inspect(reason)}"}
+  end
+
+  defp unzip_body(body, headers) do
+    header_map = headers |> Enum.into(%{})
+
+    case header_map do
+      %{"Content-Encoding" => "gzip"} ->
+        :zlib.gunzip(body)
+
+      _ ->
+        body
+    end
+  end
+
+  defp get_timeout do
+    Application.get_env(:billing_core, :soap_server_timeout)
+  end
+
+  defp get_recv_timeout do
+    Application.get_env(:billing_core, :soap_server_recv_timeout)
+  end
+end

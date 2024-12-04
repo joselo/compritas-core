@@ -1,0 +1,1 @@
+{"clave": { "fecha_emision": "03072020", "tipo_comprobante": "01", "ruc": "1103671804001", "ambiente": "1", "serie": "001001", "secuencial": "000000033", "codigo": "00000001", "tipo_emision": "1"} }

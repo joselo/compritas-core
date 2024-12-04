@@ -1,0 +1,20 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <ns2:autorizacionComprobanteResponse xmlns:ns2="http://ec.gob.sri.ws.autorizacion">
+      <RespuestaAutorizacionComprobante>
+        <claveAccesoConsultada>123456789</claveAccesoConsultada>
+        <autorizaciones>
+          <autorizacion>
+            <estado>RECHAZADA</estado>
+            <mensajes>
+              <mensaje>
+                <identificador>80</identificador>
+                <mensaje>ERROR EN LA ESTRUCTURA DE LA CLAVE DE ACCESO</mensaje>
+              </mensaje>
+            </mensajes>
+          </autorizacion>
+        </autorizaciones>
+      </RespuestaAutorizacionComprobante>
+    </ns2:autorizacionComprobanteResponse>
+  </soap:Body>
+</soap:Envelope>

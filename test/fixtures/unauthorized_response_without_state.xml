@@ -1,0 +1,13 @@
+<soap:Envelope
+	xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+	<soap:Body>
+		<ns2:autorizacionComprobanteResponse
+			xmlns:ns2="http://ec.gob.sri.ws.autorizacion">
+			<RespuestaAutorizacionComprobante>
+				<claveAccesoConsultada>1810202401110367180400110010013609762715433202211</claveAccesoConsultada>
+				<numeroComprobantes>0</numeroComprobantes>
+				<autorizaciones/>
+			</RespuestaAutorizacionComprobante>
+		</ns2:autorizacionComprobanteResponse>
+	</soap:Body>
+</soap:Envelope>

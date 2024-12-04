@@ -1,0 +1,30 @@
+<infoFactura>
+  <fechaEmision>03/07/2020</fechaEmision>
+  <dirEstablecimiento>Ciudadela: DAMMER II Calle: N49C Número: EC-102 Intersección: EL MORLAN</dirEstablecimiento>
+  <contribuyenteEspecial>666</contribuyenteEspecial>
+  <obligadoContabilidad>SI</obligadoContabilidad>
+  <tipoIdentificacionComprador>08</tipoIdentificacionComprador>
+  <razonSocialComprador>Novaux Inc.</razonSocialComprador>
+  <identificacionComprador>465219513</identificacionComprador>
+  <totalSinImpuestos>3000.00</totalSinImpuestos>
+  <totalDescuento>0.00</totalDescuento>
+  <totalConImpuestos>
+    <totalImpuesto>
+      <codigo>2</codigo>
+      <codigoPorcentaje>0</codigoPorcentaje>
+      <baseImponible>3000.00</baseImponible>
+      <valor>0.00</valor>
+    </totalImpuesto>
+  </totalConImpuestos>
+  <propina>0</propina>
+  <importeTotal>3000.00</importeTotal>
+  <moneda>DOLAR</moneda>
+  <pagos>
+    <pago>
+      <formaPago>20</formaPago>
+      <total>3000.00</total>
+      <plazo>15</plazo>
+      <unidadTiempo>Dias</unidadTiempo>
+    </pago>
+  </pagos>
+</infoFactura>
