@@ -6,7 +6,7 @@ defmodule BillingCore.Service.SigningTest do
   setup do
     xml = File.read!("test/fixtures/xml.xml")
     p12_path = "test/fixtures/file.p12"
-    p12_password = Application.get_env(:billing_core, :test_p12_password)
+    p12_password = System.get_env("TEST_P12_FILE_PASSWORD")
 
     {:ok, xml: xml, p12_path: p12_path, p12_password: p12_password}
   end

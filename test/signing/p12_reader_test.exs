@@ -9,7 +9,7 @@ defmodule BillingCore.P12ReaderTest do
       |> Path.absname()
 
     bad_path = Path.absname("test/fixtures/badpath.p12")
-    password = Application.get_env(:billing_core, :test_p12_password)
+    password = System.get_env("TEST_P12_FILE_PASSWORD")
 
     {:ok, path: path, password: password, bad_path: bad_path}
   end
