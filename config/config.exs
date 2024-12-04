@@ -14,7 +14,6 @@ config :billing_core,
   soap_server_timeout: 900_000,
   soap_server_recv_timeout: 900_000,
   timeout: 900_000,
-  client: BillingCore.Ws.ClientMock,
   open_ssl_legacy: true,
   timezone: "America/Guayaquil",
   test_p12_password: System.get_env("TEST_P12_FILE_PASSWORD")

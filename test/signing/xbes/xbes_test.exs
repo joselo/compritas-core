@@ -1,19 +1,12 @@
 defmodule BillingCore.XbesTest do
   use ExUnit.Case
 
-  import Mox
-
-  setup :verify_on_exit!
-
   alias BillingCore.Xbes.SignedInfo
   alias BillingCore.Xbes.SignedInfo.{Doc, KeyInfo, Properties}
   alias BillingCore.Xbes.{Cfg, P12.Certificate, P12.Key}
   alias BillingCore.Xbes.Signature
 
   setup do
-    # Mox.defmock(BillingCore.XbesMock, for: BillingCore.XbesBehaviour)
-    # Application.put_env(:billing, :cfg, BillingCore.XbesMock)
-
     xml =
       File.read!("test/fixtures/xml.xml")
       |> String.replace("</factura>\n", "</factura>")

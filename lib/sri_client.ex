@@ -2,11 +2,12 @@ defmodule BillingCore.SriClient do
   alias BillingCore.Ws
   alias BillingCore.ReceptionParser
   alias BillingCore.AuthorizationParser
+  alias BillingCore.Ws.Client
 
   def send_document(xml, environment) do
     params = Ws.ReceptionSoap.create_request(xml, :validarComprobante)
 
-    case client().post(get_reception_url(environment), params) do
+    case Client.post(get_reception_url(environment), params) do
       {:ok, response} ->
         ReceptionParser.parse_response(response)
 
@@ -19,17 +20,13 @@ defmodule BillingCore.SriClient do
       when is_binary(clave_acceso) and is_integer(environment) do
     params = Ws.AuthorizationSoap.create_request(clave_acceso, :autorizacionComprobante)
 
-    case client().post(get_authorization_url(environment), params) do
+    case Client.post(get_authorization_url(environment), params) do
       {:ok, response} ->
         AuthorizationParser.parse_response(response)
 
       {:error, reason} ->
         {:error, reason}
     end
-  end
-
-  defp client do
-    Application.get_env(:billing_core, :client)
   end
 
   # Test

@@ -1,12 +1,10 @@
 defmodule BillingCore.SriClientTest do
   use ExUnit.Case
 
-  import Mox
-
-  setup :verify_on_exit!
+  use Mimic
 
   alias BillingCore.SriClient
-  alias BillingCore.Ws.ClientMock
+  alias BillingCore.Ws.Client
 
   @environment 1
 
@@ -19,31 +17,31 @@ defmodule BillingCore.SriClientTest do
     end
 
     test "returns success response", %{success_response: success_response} do
-      expect(ClientMock, :post, fn _wsdl_url, _request -> {:ok, success_response} end)
+      expect(Client, :post, fn _wsdl_url, _request -> {:ok, success_response} end)
 
       assert {:ok, %{status: "RECIBIDA"}} = SriClient.send_document("<xml />", @environment)
     end
 
     test "returns error 500" do
-      expect(ClientMock, :post, fn _wsdl_url, _request -> {:error, "some error"} end)
+      expect(Client, :post, fn _wsdl_url, _request -> {:error, "some error"} end)
 
       assert {:error, _error} = SriClient.send_document("<xml />", @environment)
     end
 
     test "returns unknown error" do
-      expect(ClientMock, :post, fn _wsdl_url, _request -> {:error, "bad request"} end)
+      expect(Client, :post, fn _wsdl_url, _request -> {:error, "bad request"} end)
 
       assert {:error, _error} = SriClient.send_document("<xml />", @environment)
     end
 
     test "returns timeout" do
-      expect(ClientMock, :post, fn _wsdl_url, _request -> {:error, "timeout"} end)
+      expect(Client, :post, fn _wsdl_url, _request -> {:error, "timeout"} end)
 
       assert {:error, "timeout"} = SriClient.send_document("<xml />", @environment)
     end
 
     test "returns connection closed" do
-      ClientMock
+      Client
       |> expect(:post, fn _wsdl_url, _request -> {:error, "closed"} end)
 
       assert {:error, "closed"} = SriClient.send_document("<xml />", @environment)
@@ -63,7 +61,7 @@ defmodule BillingCore.SriClientTest do
     end
 
     test "returns success response", %{success_response: success_response} do
-      expect(ClientMock, :post, fn _wsdl_url, _request -> {:ok, success_response} end)
+      expect(Client, :post, fn _wsdl_url, _request -> {:ok, success_response} end)
 
       assert {:ok,
               %{
@@ -75,7 +73,7 @@ defmodule BillingCore.SriClientTest do
     test "is_authorized/1 with unauthorized response", %{
       unauthorized_response: unauthorized_response
     } do
-      ClientMock
+      Client
       |> expect(:post, fn _wsdl_url, _request -> {:ok, unauthorized_response} end)
 
       assert {:ok, %{status: "NO AUTORIZADO"}} =
@@ -83,25 +81,25 @@ defmodule BillingCore.SriClientTest do
     end
 
     test "returns error 500" do
-      expect(ClientMock, :post, fn _wsdl_url, _request -> {:error, "some error"} end)
+      expect(Client, :post, fn _wsdl_url, _request -> {:error, "some error"} end)
 
       assert {:error, _error} = SriClient.is_authorized("123456789", @environment)
     end
 
     test "returns unknown error" do
-      expect(ClientMock, :post, fn _wsdl_url, _request -> {:error, "bad request"} end)
+      expect(Client, :post, fn _wsdl_url, _request -> {:error, "bad request"} end)
 
       assert {:error, _error} = SriClient.is_authorized("123456789", @environment)
     end
 
     test "returns timeout" do
-      expect(ClientMock, :post, fn _wsdl_url, _request -> {:error, "timeout"} end)
+      expect(Client, :post, fn _wsdl_url, _request -> {:error, "timeout"} end)
 
       assert {:error, "timeout"} = SriClient.is_authorized("123456789", @environment)
     end
 
     test "returns connection closed" do
-      expect(ClientMock, :post, fn _wsdl_url, _request -> {:error, "closed"} end)
+      expect(Client, :post, fn _wsdl_url, _request -> {:error, "closed"} end)
 
       assert {:error, "closed"} = SriClient.is_authorized("123456789", @environment)
     end
