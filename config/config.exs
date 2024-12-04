@@ -17,4 +17,5 @@ config :billing_core,
   crypto_key: "lVPevoQt_xR5X7oMuHqTfSmLlHtTCQ4dZZJasS_cFMw=",
   client: Billing.Ws.ClientMock,
   open_ssl_legacy: true,
+  timezone: "America/Guayaquil",
   test_p12_password: System.get_env("TEST_P12_FILE_PASSWORD")
