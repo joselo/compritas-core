@@ -8,10 +8,7 @@ defmodule Billing.Service.SignServiceTest do
     p12_path = "test/fixtures/file.p12"
     p12_password = Application.get_env(:billing_core, :test_p12_password)
 
-    {:ok,
-     xml: xml,
-     p12_path: p12_path,
-     p12_password: p12_password}
+    {:ok, xml: xml, p12_path: p12_path, p12_password: p12_password}
   end
 
   describe "sign/3" do

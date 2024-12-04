@@ -7,10 +7,10 @@ defmodule Billing.Service.FacturaService do
     case validate_invoice(factura_params) do
       {:ok, factura} ->
         {:ok, [xml: Factura.to_xml(factura), clave_acceso: factura.info_tributaria.clave_acceso]}
-      
+
       {:error, reason} ->
         {:error, reason}
-    end 
+    end
   end
 
   defp validate_invoice(params) do
@@ -23,4 +23,3 @@ defmodule Billing.Service.FacturaService do
     end
   end
 end
-

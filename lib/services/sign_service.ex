@@ -19,4 +19,3 @@ defmodule Billing.Service.SignService do
     end
   end
 end
-
