@@ -13,8 +13,8 @@ defmodule BillingCore.Ws.Client do
     ]
 
     HTTPoison.post(wsdl_url, body, headers,
-      timeout: get_timeout(),
-      recv_timeout: get_recv_timeout()
+      timeout: BillingCore.timeout(),
+      recv_timeout: BillingCore.soap_server_recv_timeout()
     )
     |> handle_response()
   end
@@ -27,8 +27,8 @@ defmodule BillingCore.Ws.Client do
     body = URI.encode_query(params)
 
     HTTPoison.put(url, body, headers,
-      timeout: get_timeout(),
-      recv_timeout: get_recv_timeout()
+      timeout: BillingCore.timeout(),
+      recv_timeout: BillingCore.soap_server_recv_timeout()
     )
     |> handle_response
   end
@@ -67,13 +67,5 @@ defmodule BillingCore.Ws.Client do
       _ ->
         body
     end
-  end
-
-  defp get_timeout do
-    Application.get_env(:billing_core, :soap_server_timeout)
-  end
-
-  defp get_recv_timeout do
-    Application.get_env(:billing_core, :soap_server_recv_timeout)
   end
 end

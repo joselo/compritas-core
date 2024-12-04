@@ -84,6 +84,6 @@ defmodule BillingCore.Xbes do
   end
 
   defp config do
-    Application.get_env(:billing_core, :cfg) || __MODULE__
+    __MODULE__
   end
 end

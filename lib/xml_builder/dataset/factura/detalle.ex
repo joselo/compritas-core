@@ -1,7 +1,7 @@
 defmodule BillingCore.Dataset.Factura.Detalle do
   @moduledoc false
 
-  @decimals Application.compile_env(:billing, :decimals, 2)
+  @decimals BillingCore.decimals()
 
   alias BillingCore.Dataset.Factura.{DetAdicional, Impuesto}
 

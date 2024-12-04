@@ -1,7 +1,7 @@
 defmodule BillingCore.Dataset.Factura.Impuesto do
   @moduledoc false
 
-  @decimals Application.compile_env(:billing, :decimals, 2)
+  @decimals BillingCore.decimals()
 
   use Ecto.Schema
   import Ecto.Changeset

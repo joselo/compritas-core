@@ -6,7 +6,7 @@ defmodule BillingCore.Signing do
 
   def sign(xml, p12_path, p12_password) do
     signing_time =
-      Application.get_env(:billing_core, :timezone)
+      BillingCore.timezone()
       |> Timex.now()
       |> Timex.format!("%FT%T%:z", :strftime)
 

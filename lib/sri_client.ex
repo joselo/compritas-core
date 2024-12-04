@@ -29,23 +29,19 @@ defmodule BillingCore.SriClient do
     end
   end
 
-  # Test
   defp get_reception_url(1) do
-    Application.fetch_env!(:billing_core, :reception_url)
+    BillingCore.reception_url()
   end
 
-  # Production
   defp get_reception_url(2) do
-    Application.fetch_env!(:billing_core, :prod_reception_url)
+    BillingCore.prod_reception_url()
   end
 
-  # Test
   def get_authorization_url(1) do
-    Application.fetch_env!(:billing_core, :authorization_url)
+    BillingCore.authorization_url()
   end
 
-  # Production 
   def get_authorization_url(2) do
-    Application.fetch_env!(:billing_core, :prod_authorization_url)
+    BillingCore.prod_authorization_url()
   end
 end

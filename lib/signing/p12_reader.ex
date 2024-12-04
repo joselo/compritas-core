@@ -26,7 +26,7 @@ defmodule BillingCore.P12Reader do
     ]
 
     options =
-      if Application.get_env(:billing_core, :open_ssl_legacy) do
+      if BillingCore.open_ssl_legacy() do
         options ++ ["-legacy"]
       else
         options
@@ -50,7 +50,7 @@ defmodule BillingCore.P12Reader do
     ]
 
     options =
-      if Application.get_env(:billing_core, :open_ssl_legacy) do
+      if BillingCore.open_ssl_legacy() do
         options ++ ["-legacy"]
       else
         options
