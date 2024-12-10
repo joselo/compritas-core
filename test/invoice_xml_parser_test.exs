@@ -1,6 +1,5 @@
 defmodule BillingCore.InvoiceXmlParserTest do
   use ExUnit.Case
-  # use Mimic
 
   alias BillingCore.InvoiceXmlParser
 
