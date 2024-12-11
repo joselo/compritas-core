@@ -13,6 +13,8 @@ defmodule BillingCore.InvoicePdfBuilderTest do
 
   describe "build/1" do
     test "build a pdf", %{xml_map: xml_map} do
+      dbg(xml_map)
+
       pdf = InvoicePdfBuilder.build(xml_map)
       File.write!("/home/joselo/Downloads/invoice.pdf", pdf)
     end

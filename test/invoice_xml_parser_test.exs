@@ -106,11 +106,18 @@ defmodule BillingCore.InvoiceXmlParserTest do
   test "get_totals/1 returns 'totals'", %{xml_invoice: xml_invoice} do
     assert InvoiceXmlParser.get_totals(xml_invoice) == %{
              sub_total_without_taxes: "2.72",
-             total_without_taxes: "0.00",
-             total_with_taxes: "2.72",
-             total_taxes: "0.33",
+             # total_without_taxes: "0.00",
+             # total_with_taxes: "2.72",
+             # total_taxes: "0.33",
              total_discount: "0.00",
              total: "3.05"
            }
+  end
+
+  test "get_taxes/1 returns 'taxes'", %{xml_invoice: xml_invoice} do
+    assert InvoiceXmlParser.get_taxes(xml_invoice) == [
+      %{tax_value: "2.72", tax_total: "0.33", tax_code: "2"},
+      %{tax_value: "0.00", tax_total: "0.00", tax_code: "0"}
+    ]
   end
 end

@@ -35,7 +35,8 @@ defmodule BillingCore.InvoiceXmlParser do
       environment: get_environment(xml_invoice),
       emssion_type: get_emission_type(xml_invoice),
       invoice_number: get_invoice_number(xml_invoice),
-      currency: get_currency(xml_invoice)
+      currency: get_currency(xml_invoice),
+      taxes: get_taxes(xml_invoice) 
     }
     |> Map.merge(get_totals(xml_invoice))
     |> Map.merge(get_client_fields(xml_invoice))
@@ -132,21 +133,17 @@ defmodule BillingCore.InvoiceXmlParser do
   end
 
   def get_totals(xml_struct) do
-    Map.merge(
-      %{
-        sub_total_without_taxes:
-          xml_struct["factura"]["#content"]["infoFactura"]["totalSinImpuestos"],
-        total_discount: xml_struct["factura"]["#content"]["infoFactura"]["totalDescuento"],
-        total: xml_struct["factura"]["#content"]["infoFactura"]["importeTotal"]
-      },
-      with_taxes(xml_struct)
-    )
+    %{
+      sub_total_without_taxes:
+        xml_struct["factura"]["#content"]["infoFactura"]["totalSinImpuestos"],
+      total_discount: xml_struct["factura"]["#content"]["infoFactura"]["totalDescuento"],
+      total: xml_struct["factura"]["#content"]["infoFactura"]["importeTotal"]
+    }
   end
 
-  defp with_taxes(xml_struct) do
+  def get_taxes(xml_struct) do
     xml_struct["factura"]["#content"]["infoFactura"]["totalConImpuestos"]["totalImpuesto"]
-    |> Enum.flat_map(&determinate_tax(&1))
-    |> Map.new()
+    |> Enum.map(&determinate_tax(&1))
   end
 
   def get_payments(xml_struct) do
@@ -157,16 +154,11 @@ defmodule BillingCore.InvoiceXmlParser do
     xml_struct["factura"]["#content"]["infoFactura"]["moneda"]
   end
 
-  defp determinate_tax(%{"codigoPorcentaje" => "0", "baseImponible" => total, "valor" => _value}) do
+  defp determinate_tax(%{"codigoPorcentaje" => code, "baseImponible" => total, "valor" => value}) do
     %{
-      total_without_taxes: total
-    }
-  end
-
-  defp determinate_tax(%{"codigoPorcentaje" => _, "baseImponible" => total, "valor" => value}) do
-    %{
-      total_with_taxes: total,
-      total_taxes: value
+      tax_value: total,
+      tax_total: value,
+      tax_code: code
     }
   end
 

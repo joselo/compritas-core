@@ -122,7 +122,6 @@ defmodule BillingCore.InvoicePdfBuilder do
     %{width: width, height: _height} = Pdf.size(pdf)
     cursor = Pdf.cursor(pdf) - 20
     page_number = "#{Pdf.page_number(pdf)}"
-    tax_value = "HOLA"
 
     pdf
     |> Pdf.set_font_size(7)
@@ -135,12 +134,12 @@ defmodule BillingCore.InvoicePdfBuilder do
     # Sub Totals
     |> Pdf.text_wrap!({400, cursor}, {120, 10}, "Sub Total", bold: true)
     |> Pdf.text_wrap!({430, cursor}, {120, 10}, invoice[:sub_total_without_taxes], align: :right)
-    |> Pdf.text_wrap!({400, cursor - 10}, {120, 10}, "Tarifa 0%", bold: true)
-    |> Pdf.text_wrap!({430, cursor - 10}, {120, 10}, invoice[:total_without_taxes], align: :right)
-    |> Pdf.text_wrap!({400, cursor - 20}, {120, 10}, "Tarifa #{tax_value}", bold: true)
-    |> Pdf.text_wrap!({430, cursor - 20}, {120, 10}, invoice[:total_with_taxes], align: :right)
-    |> Pdf.text_wrap!({400, cursor - 30}, {120, 10}, "I.V.A. #{tax_value}", bold: true)
-    |> Pdf.text_wrap!({430, cursor - 30}, {120, 10}, invoice[:total_taxes], align: :right)
+    # |> Pdf.text_wrap!({400, cursor - 10}, {120, 10}, "Tarifa 0%", bold: true)
+    # |> Pdf.text_wrap!({430, cursor - 10}, {120, 10}, invoice[:total_without_taxes], align: :right)
+    # |> Pdf.text_wrap!({400, cursor - 20}, {120, 10}, "Tarifa #{tax_value}", bold: true)
+    # |> Pdf.text_wrap!({430, cursor - 20}, {120, 10}, invoice[:total_with_taxes], align: :right)
+    # |> Pdf.text_wrap!({400, cursor - 30}, {120, 10}, "I.V.A. #{tax_value}", bold: true)
+    # |> Pdf.text_wrap!({430, cursor - 30}, {120, 10}, invoice[:total_taxes], align: :right)
     |> Pdf.text_wrap!({400, cursor - 40}, {120, 10}, "Descuento", bold: true)
     |> Pdf.text_wrap!({430, cursor - 40}, {120, 10}, invoice[:total_discount], align: :right)
     # Total
