@@ -32,11 +32,17 @@ defmodule BillingCore.InvoicePdfBuilder do
   ]
 
   def build(xml_map) do
+    tax_table = Enum.map(xml_map.taxes, fn tax ->
+      [
+        tax.tax_code,
+        tax.tax_total
+      ]
+    end)
+
     xml_map =
       xml_map
       |> Map.put(:auth_datetime, "test")
-      |> Map.put(:auth_datetime, "test")
-      |> Map.put(:bar_code_path, "test")
+      |> Map.put(:tax_table, tax_table)
 
     {:ok, pdf} = Pdf.new(size: :a4, compress: false)
 
@@ -46,7 +52,7 @@ defmodule BillingCore.InvoicePdfBuilder do
         title: "Test Document",
         producer: "Test producer",
         creator: "Test Creator",
-        created: ~D"2020-03-17",
+        created: Date.utc_today(),
         modified: Date.utc_today(),
         author: "Test Author",
         subject: "Test Subject"
@@ -123,23 +129,39 @@ defmodule BillingCore.InvoicePdfBuilder do
     cursor = Pdf.cursor(pdf) - 20
     page_number = "#{Pdf.page_number(pdf)}"
 
-    pdf
-    |> Pdf.set_font_size(7)
-    # Payment
-    |> Pdf.text_at({50, cursor}, "Forma de Pago", bold: true)
-    |> Pdf.text_at({50, cursor - 20}, invoice.payment_method)
-    |> Pdf.text_at({50, cursor - 30}, "Moneda: #{invoice.currency}")
-    |> Pdf.text_at({50, cursor - 40}, "Plazo: #{invoice.payment_due_date}")
-    |> Pdf.text_at({50, cursor - 50}, "Total: #{invoice.payment_total}")
-    # Sub Totals
-    |> Pdf.text_wrap!({400, cursor}, {120, 10}, "Sub Total", bold: true)
-    |> Pdf.text_wrap!({430, cursor}, {120, 10}, invoice[:sub_total_without_taxes], align: :right)
+    pdf =
+      pdf
+      |> Pdf.set_font_size(7)
+      # Payment
+      |> Pdf.text_at({50, cursor}, "Forma de Pago", bold: true)
+      |> Pdf.text_at({50, cursor - 20}, invoice.payment_method)
+      |> Pdf.text_at({50, cursor - 30}, "Moneda: #{invoice.currency}")
+      |> Pdf.text_at({50, cursor - 40}, "Plazo: #{invoice.payment_due_date}")
+      |> Pdf.text_at({50, cursor - 50}, "Total: #{invoice.payment_total}")
+      # Sub Totals
+      |> Pdf.text_wrap!({400, cursor}, {120, 10}, "Sub Total", bold: true)
+      |> Pdf.text_wrap!({430, cursor}, {120, 10}, invoice[:sub_total_without_taxes], align: :right)
+
+    {pdf, _grid} = Pdf.table(pdf, {400, cursor - 10}, {150, 150}, invoice.tax_table, [
+      padding: 2,
+      border: 0.1,
+      cols: [
+        [width: 220, bold: true],
+        [width: 220, align: :right]
+      ]
+    ])
+
+    cursor = Pdf.cursor(pdf) - 10
+
+    # Old Taxes
     # |> Pdf.text_wrap!({400, cursor - 10}, {120, 10}, "Tarifa 0%", bold: true)
     # |> Pdf.text_wrap!({430, cursor - 10}, {120, 10}, invoice[:total_without_taxes], align: :right)
     # |> Pdf.text_wrap!({400, cursor - 20}, {120, 10}, "Tarifa #{tax_value}", bold: true)
     # |> Pdf.text_wrap!({430, cursor - 20}, {120, 10}, invoice[:total_with_taxes], align: :right)
     # |> Pdf.text_wrap!({400, cursor - 30}, {120, 10}, "I.V.A. #{tax_value}", bold: true)
     # |> Pdf.text_wrap!({430, cursor - 30}, {120, 10}, invoice[:total_taxes], align: :right)
+    # End Old Taxes
+    pdf
     |> Pdf.text_wrap!({400, cursor - 40}, {120, 10}, "Descuento", bold: true)
     |> Pdf.text_wrap!({430, cursor - 40}, {120, 10}, invoice[:total_discount], align: :right)
     # Total
