@@ -1,12 +1,6 @@
 defmodule BillingCore.InvoicePdfBuilder do
   @moduledoc false
 
-  # alias App.Billing
-  # alias App.Billing.Invoice
-  # alias App.Billing.InvoiceInformation
-  # alias Connectors.Billing.AuthorizationResponseParser
-  # alias Connectors.Billing.InvoiceXmlParser
-
   @table_opts [
     padding: 2,
     border: 0.1,
@@ -31,18 +25,32 @@ defmodule BillingCore.InvoicePdfBuilder do
     }
   ]
 
-  def build(xml_map) do
-    tax_table = Enum.map(xml_map.taxes, fn tax ->
-      [
-        tax.tax_code,
-        tax.tax_total
-      ]
-    end)
+  def build(xml_map, logo_path \\ nil, bar_code_path \\ nil) do
+    document = xml_map.document
 
-    xml_map =
-      xml_map
-      |> Map.put(:auth_datetime, "test")
-      |> Map.put(:tax_table, tax_table)
+    subtotal = [
+      ["Subtotal", document.sub_total_without_taxes]
+    ]
+
+    taxes =
+      Enum.map(document.taxes, fn tax ->
+        [
+          tax.tax_label,
+          tax.tax_total
+        ]
+      end)
+
+    totals = [
+      ["Descuento", document.total_discount],
+      ["Total", document.total]
+    ]
+
+    totals_table = subtotal ++ taxes ++ totals
+
+    document =
+      document
+      |> Map.put(:auth_datetime, xml_map.authorization_date)
+      |> Map.put(:totals_table, totals_table)
 
     {:ok, pdf} = Pdf.new(size: :a4, compress: false)
 
@@ -59,12 +67,12 @@ defmodule BillingCore.InvoicePdfBuilder do
       )
       |> Pdf.set_font("Helvetica", 10)
 
-    pdf = render(pdf, xml_map)
+    pdf = render(pdf, document, logo_path, bar_code_path)
 
     Pdf.export(pdf)
   end
 
-  defp render(pdf, invoice, logo_path \\ nil, bar_code_path \\ nil) do
+  defp render(pdf, invoice, logo_path, bar_code_path) do
     {pdf, grid} =
       pdf
       |> add_header(invoice, logo_path, bar_code_path)
@@ -87,8 +95,8 @@ defmodule BillingCore.InvoicePdfBuilder do
     # |> Pdf.rectangle({430, 700}, {60, 100})
     # |> Pdf.rectangle({50, 580}, {240, 100})
     # |> Pdf.rectangle({310, 580}, {240, 100})
-    # |> Pdf.rectangle({370, 625}, {180, 20}) #----
-    # |> Pdf.rectangle({370, 605}, {180, 20}) #----
+    # |> Pdf.rectangle({370, 625}, {180, 20})
+    # |> Pdf.rectangle({370, 605}, {180, 20})
     # |> Pdf.stroke()
     # End Guides
     # Logo
@@ -138,43 +146,20 @@ defmodule BillingCore.InvoicePdfBuilder do
       |> Pdf.text_at({50, cursor - 30}, "Moneda: #{invoice.currency}")
       |> Pdf.text_at({50, cursor - 40}, "Plazo: #{invoice.payment_due_date}")
       |> Pdf.text_at({50, cursor - 50}, "Total: #{invoice.payment_total}")
-      # Sub Totals
-      |> Pdf.text_wrap!({400, cursor}, {120, 10}, "Sub Total", bold: true)
-      |> Pdf.text_wrap!({430, cursor}, {120, 10}, invoice[:sub_total_without_taxes], align: :right)
 
-    {pdf, _grid} = Pdf.table(pdf, {400, cursor - 10}, {150, 150}, invoice.tax_table, [
-      padding: 2,
-      border: 0.1,
-      cols: [
-        [width: 220, bold: true],
-        [width: 220, align: :right]
-      ]
-    ])
+    # Totals
 
-    cursor = Pdf.cursor(pdf) - 10
+    {pdf, _grid} =
+      Pdf.table(pdf, {400, cursor}, {150, 150}, invoice.totals_table,
+        padding: 2,
+        border: 0.1,
+        cols: [
+          [width: 220, bold: true],
+          [width: 220, align: :right]
+        ]
+      )
 
-    # Old Taxes
-    # |> Pdf.text_wrap!({400, cursor - 10}, {120, 10}, "Tarifa 0%", bold: true)
-    # |> Pdf.text_wrap!({430, cursor - 10}, {120, 10}, invoice[:total_without_taxes], align: :right)
-    # |> Pdf.text_wrap!({400, cursor - 20}, {120, 10}, "Tarifa #{tax_value}", bold: true)
-    # |> Pdf.text_wrap!({430, cursor - 20}, {120, 10}, invoice[:total_with_taxes], align: :right)
-    # |> Pdf.text_wrap!({400, cursor - 30}, {120, 10}, "I.V.A. #{tax_value}", bold: true)
-    # |> Pdf.text_wrap!({430, cursor - 30}, {120, 10}, invoice[:total_taxes], align: :right)
-    # End Old Taxes
-    pdf
-    |> Pdf.text_wrap!({400, cursor - 40}, {120, 10}, "Descuento", bold: true)
-    |> Pdf.text_wrap!({430, cursor - 40}, {120, 10}, invoice[:total_discount], align: :right)
-    # Total
-    |> Pdf.line({400, cursor - 60}, {550, cursor - 60})
-    |> Pdf.stroke()
-    |> Pdf.text_wrap!({400, cursor - 70}, {120, 10}, "Total", bold: true, font_size: 10)
-    |> Pdf.text_wrap!({430, cursor - 70}, {120, 10}, invoice[:total],
-      align: :right,
-      bold: true,
-      font_size: 10
-    )
-    # Footer
-    |> Pdf.text_wrap!({20, 100}, {width - 40, 20}, "Página #{page_number}", align: :center)
+    Pdf.text_wrap!(pdf, {20, 100}, {width - 40, 20}, "Página #{page_number}", align: :center)
   end
 
   defp add_table({pdf, :complete}, _invoice, _logo_path, _bar_code_path), do: pdf

@@ -4,9 +4,12 @@ defmodule BillingCore.InvoiceXmlParserTest do
   alias BillingCore.InvoiceXmlParser
 
   setup do
-    xml_signed = File.read!("test/fixtures/invoice_xml_signed.xml")
+    xml = File.read!("test/fixtures/success_authorization_response.xml")
+    xml_map = XmlToMap.naive_map(xml)
+    authorization = InvoiceXmlParser.get_authorization(xml_map)
+    document = XmlToMap.naive_map(authorization["comprobante"])
 
-    {:ok, xml_invoice: XmlToMap.naive_map(xml_signed)}
+    {:ok, xml_invoice: document}
   end
 
   test "get_items/1 returns 'detalles'", %{xml_invoice: xml_invoice} do
@@ -116,8 +119,8 @@ defmodule BillingCore.InvoiceXmlParserTest do
 
   test "get_taxes/1 returns 'taxes'", %{xml_invoice: xml_invoice} do
     assert InvoiceXmlParser.get_taxes(xml_invoice) == [
-      %{tax_value: "2.72", tax_total: "0.33", tax_code: "2"},
-      %{tax_value: "0.00", tax_total: "0.00", tax_code: "0"}
-    ]
+             %{tax_value: "2.72", tax_total: "0.33", tax_code: "2", tax_label: "IVA 12%"},
+             %{tax_value: "0.00", tax_total: "0.00", tax_code: "0", tax_label: "IVA 0%"}
+           ]
   end
 end

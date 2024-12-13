@@ -13,13 +13,33 @@ defmodule BillingCore.InvoiceXmlParser do
     "Total"
   ]
 
+  def get_authorization(xml_map) do
+    xml_map["soap:Envelope"]["soap:Body"]["ns2:autorizacionComprobanteResponse"][
+      "RespuestaAutorizacionComprobante"
+    ]["autorizaciones"]["autorizacion"]
+  end
+
+  def parse_xml(nil) do
+    nil
+  end
+
+  def parse_xml(xml) do
+    xml_map = XmlToMap.naive_map(xml)
+    authorization = get_authorization(xml_map)
+
+    document = parse(XmlToMap.naive_map(authorization["comprobante"]))
+
+    %{
+      document: document,
+      authorization_date: authorization["fechaAutorizacion"]
+    }
+  end
+
   def parse(nil) do
     nil
   end
 
-  def parse(xml_signed) do
-    xml_invoice = XmlToMap.naive_map(xml_signed)
-
+  def parse(xml_invoice) do
     %{
       items: get_items(xml_invoice),
       business_name: get_business_name(xml_invoice),
@@ -36,7 +56,7 @@ defmodule BillingCore.InvoiceXmlParser do
       emssion_type: get_emission_type(xml_invoice),
       invoice_number: get_invoice_number(xml_invoice),
       currency: get_currency(xml_invoice),
-      taxes: get_taxes(xml_invoice) 
+      taxes: get_taxes(xml_invoice)
     }
     |> Map.merge(get_totals(xml_invoice))
     |> Map.merge(get_client_fields(xml_invoice))
@@ -158,11 +178,20 @@ defmodule BillingCore.InvoiceXmlParser do
     %{
       tax_value: total,
       tax_total: value,
-      tax_code: code
+      tax_code: code,
+      tax_label: get_tax_label(code)
     }
   end
 
-  defp determinate_tax(%{codigoPorcentaje: _, baseImponible: _total, valor: _value}), do: %{}
+  defp get_tax_label(code) do
+    case code do
+      "0" -> "IVA 0%"
+      "2" -> "IVA 12%"
+      "4" -> "IVA 15%"
+      "10" -> "IVA 13%"
+      _ -> code
+    end
+  end
 
   defp determinate_client_field(%{"#content" => address, "-nombre" => "Dirección"}) do
     %{
