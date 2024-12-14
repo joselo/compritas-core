@@ -168,7 +168,8 @@ defmodule BillingCore.InvoiceXmlParser do
 
   def get_payments(xml_struct) do
     %{
-      payments: determinate_payment(xml_struct["factura"]["#content"]["infoFactura"]["pagos"]["pago"])
+      payments:
+        determinate_payment(xml_struct["factura"]["#content"]["infoFactura"]["pagos"]["pago"])
     }
   end
 
@@ -189,8 +190,11 @@ defmodule BillingCore.InvoiceXmlParser do
     case code do
       "0" -> "IVA 0%"
       "2" -> "IVA 12%"
+      "3" -> "IVA 14%"
       "4" -> "IVA 15%"
       "10" -> "IVA 13%"
+      "6" -> "No objeto de impuesto"
+      "7" -> "Excento de Iva"
       _ -> code
     end
   end
@@ -213,13 +217,14 @@ defmodule BillingCore.InvoiceXmlParser do
          "total" => total,
          "unidadTiempo" => time
        }) do
-    payment_method = case method do
-      "16" -> "TARJETA DE DÉBITO"
-      "18" -> "TARJETA PREPAGO"
-      "19" -> "TARJETA DE CRÉDITO"
-      "20" -> "OTROS CON UTILIZACION DEL SISTEMA FINANCIERO"
-      _ -> method
-    end
+    payment_method =
+      case method do
+        "16" -> "TARJETA DE DÉBITO"
+        "18" -> "TARJETA PREPAGO"
+        "19" -> "TARJETA DE CRÉDITO"
+        "20" -> "OTROS CON UTILIZACION DEL SISTEMA FINANCIERO"
+        _ -> method
+      end
 
     %{
       method: payment_method,
