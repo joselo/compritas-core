@@ -142,10 +142,10 @@ defmodule BillingCore.InvoicePdfBuilder do
       |> Pdf.set_font_size(7)
       # Payment
       |> Pdf.text_at({50, cursor}, "Forma de Pago", bold: true)
-      |> Pdf.text_at({50, cursor - 20}, invoice.payment_method)
+      |> Pdf.text_at({50, cursor - 20}, invoice.payments.method)
       |> Pdf.text_at({50, cursor - 30}, "Moneda: #{invoice.currency}")
-      |> Pdf.text_at({50, cursor - 40}, "Plazo: #{invoice.payment_due_date}")
-      |> Pdf.text_at({50, cursor - 50}, "Total: #{invoice.payment_total}")
+      |> Pdf.text_at({50, cursor - 40}, "Plazo: #{invoice.payments.due_date}")
+      |> Pdf.text_at({50, cursor - 50}, "Total: #{invoice.payments.total}")
 
     # Totals
 

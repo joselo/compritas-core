@@ -167,7 +167,9 @@ defmodule BillingCore.InvoiceXmlParser do
   end
 
   def get_payments(xml_struct) do
-    determinate_payment(xml_struct["factura"]["#content"]["infoFactura"]["pagos"]["pago"])
+    %{
+      payments: determinate_payment(xml_struct["factura"]["#content"]["infoFactura"]["pagos"]["pago"])
+    }
   end
 
   def get_currency(xml_struct) do
@@ -206,28 +208,23 @@ defmodule BillingCore.InvoiceXmlParser do
   end
 
   defp determinate_payment(%{
-         "formaPago" => "19",
-         "plazo" => term,
-         "total" => total,
-         "unidadTiempo" => time
-       }) do
-    %{
-      payment_method: "TARJETA DE CRÉDITO",
-      payment_total: total,
-      payment_due_date: "#{term} #{time}"
-    }
-  end
-
-  defp determinate_payment(%{
          "formaPago" => method,
          "plazo" => term,
          "total" => total,
          "unidadTiempo" => time
        }) do
+    payment_method = case method do
+      "16" -> "TARJETA DE DÉBITO"
+      "18" -> "TARJETA PREPAGO"
+      "19" -> "TARJETA DE CRÉDITO"
+      "20" -> "OTROS CON UTILIZACION DEL SISTEMA FINANCIERO"
+      _ -> method
+    end
+
     %{
-      method: method,
+      method: payment_method,
       total: total,
-      due_date: "#{time} #{term}"
+      due_date: "#{term} #{time}"
     }
   end
 end
