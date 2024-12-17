@@ -51,12 +51,6 @@ defmodule BillingCoreTest do
     end
   end
 
-  describe "open_ssl_legacy/0" do
-    test "returns the flag for open ssl legacy" do
-      assert BillingCore.open_ssl_legacy() == true
-    end
-  end
-
   describe "timezone/0" do
     test "returns the default timezone" do
       assert BillingCore.timezone() == "America/Guayaquil"

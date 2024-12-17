@@ -22,15 +22,9 @@ defmodule BillingCore.P12Reader do
       "-clcerts",
       "-nokeys",
       "-passin",
-      "pass:#{password}"
+      "pass:#{password}",
+      "-legacy"
     ]
-
-    options =
-      if BillingCore.open_ssl_legacy() do
-        options ++ ["-legacy"]
-      else
-        options
-      end
 
     case System.cmd("openssl", options, stderr_to_stdout: true) do
       {cert, 0} -> {:ok, cert}
@@ -46,15 +40,9 @@ defmodule BillingCore.P12Reader do
       "-nocerts",
       "-nodes",
       "-passin",
-      "pass:#{password}"
+      "pass:#{password}",
+      "-legacy"
     ]
-
-    options =
-      if BillingCore.open_ssl_legacy() do
-        options ++ ["-legacy"]
-      else
-        options
-      end
 
     case System.cmd("openssl", options, stderr_to_stdout: true) do
       {rsa, 0} -> {:ok, rsa}

@@ -33,10 +33,6 @@ defmodule BillingCore do
     900_000
   end
 
-  def open_ssl_legacy do
-    true
-  end
-
   def timezone do
     "America/Guayaquil"
   end
