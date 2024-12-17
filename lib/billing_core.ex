@@ -34,7 +34,7 @@ defmodule BillingCore do
   end
 
   def open_ssl_legacy do
-    true
+    false
   end
 
   def timezone do
