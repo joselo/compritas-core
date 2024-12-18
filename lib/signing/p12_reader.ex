@@ -23,7 +23,6 @@ defmodule BillingCore.P12Reader do
       "-nokeys",
       "-passin",
       "pass:#{password}",
-      "-legacy"
     ]
 
     case System.cmd("openssl", options, stderr_to_stdout: true) do
@@ -40,8 +39,7 @@ defmodule BillingCore.P12Reader do
       "-nocerts",
       "-nodes",
       "-passin",
-      "pass:#{password}",
-      "-legacy"
+      "pass:#{password}"
     ]
 
     case System.cmd("openssl", options, stderr_to_stdout: true) do
