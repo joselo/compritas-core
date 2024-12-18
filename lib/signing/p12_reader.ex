@@ -22,8 +22,10 @@ defmodule BillingCore.P12Reader do
       "-clcerts",
       "-nokeys",
       "-passin",
-      "pass:#{password}",
+      "pass:#{password}"
     ]
+
+    options = legacy_options(options)
 
     case System.cmd("openssl", options, stderr_to_stdout: true) do
       {cert, 0} -> {:ok, cert}
@@ -42,9 +44,33 @@ defmodule BillingCore.P12Reader do
       "pass:#{password}"
     ]
 
+    options = legacy_options(options)
+
     case System.cmd("openssl", options, stderr_to_stdout: true) do
       {rsa, 0} -> {:ok, rsa}
       {error, 1} -> {:error, error}
+    end
+  end
+
+  defp legacy_options(options) do
+    {major, minor, _patch} = openssl_version()
+
+    if major > 3 or (major == 3 and minor >= 0) do
+      options ++ ["-legacy"]
+    else
+      options
+    end
+  end
+
+  defp openssl_version do
+    {output, 0} = System.cmd("openssl", ["version"])
+
+    case Regex.run(~r/OpenSSL (\d+)\.(\d+)\.(\d+)/, output) do
+      [_, major, minor, patch] ->
+        {String.to_integer(major), String.to_integer(minor), String.to_integer(patch)}
+
+      _ ->
+        {0, 0, 0}
     end
   end
 end
