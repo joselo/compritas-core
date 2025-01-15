@@ -125,4 +125,10 @@ defmodule BillingCore.InvoiceXmlParserTest do
              %{tax_value: "0.00", tax_total: "0.00", tax_code: "0", tax_label: "IVA 0%"}
            ]
   end
+
+  test "returns nil if it cannot parse an xml without authorization" do
+    xml = File.read!("test/fixtures/unauthorized_response_without_state.xml")
+
+    assert !InvoiceXmlParser.parse_xml(xml)
+  end
 end

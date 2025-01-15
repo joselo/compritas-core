@@ -27,12 +27,14 @@ defmodule BillingCore.InvoiceXmlParser do
     xml_map = XmlToMap.naive_map(xml)
     authorization = get_authorization(xml_map)
 
-    document = parse(XmlToMap.naive_map(authorization["comprobante"]))
+    if authorization do
+      document = parse(XmlToMap.naive_map(authorization["comprobante"]))
 
-    %{
-      document: document,
-      authorization_date: authorization["fechaAutorizacion"]
-    }
+      %{
+        document: document,
+        authorization_date: authorization["fechaAutorizacion"]
+      }
+    end
   end
 
   def parse(nil) do
