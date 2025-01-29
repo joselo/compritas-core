@@ -17,7 +17,7 @@ defmodule BillingCore.Dataset.Factura.PagoTest do
       :pago,
       nil,
       [
-        {:formaPago, nil, pago.forma_pago},
+        {:formaPago, nil, Integer.to_string(pago.forma_pago) |> String.pad_leading(2, "0")},
         {:total, nil, :erlang.float_to_binary(pago.total, decimals: 2)},
         {:plazo, nil, pago.plazo},
         {:unidadTiempo, nil, pago.unidad_tiempo}

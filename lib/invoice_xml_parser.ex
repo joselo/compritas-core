@@ -225,6 +225,10 @@ defmodule BillingCore.InvoiceXmlParser do
         "18" -> "TARJETA PREPAGO"
         "19" -> "TARJETA DE CRÉDITO"
         "20" -> "OTROS CON UTILIZACION DEL SISTEMA FINANCIERO"
+        "01" -> "SIN UTILIZACION DEL SISTEMA FINANCIERO"
+        "15" -> "COMPENSACIÓN DE DEUDAS"
+        "17" -> "DINERO ELECTRÓNICO"
+        "21" -> "ENDOSO DE TÍTULOS"
         _ -> method
       end
 
