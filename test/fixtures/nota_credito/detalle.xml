@@ -1,21 +1,21 @@
 <detalle>
-  <codigoInterno>831410399</codigoInterno>
-  <codigoAdicional>2</codigoAdicional>
-  <descripcion>SERVICIOS PROFESIONALES NOVAUX INC.</descripcion>
-  <cantidad>1.0</cantidad>
-  <precioUnitario>3000.00</precioUnitario>
+  <codigoInterno>00005158</codigoInterno>
+  <codigoAdicional>00005158</codigoAdicional>
+  <descripcion>SIKA EMPASTE EXTERIOR 20KG</descripcion>
+  <cantidad>2.0</cantidad>
+  <precioUnitario>21.25</precioUnitario>
   <descuento>0.00</descuento>
-  <precioTotalSinImpuesto>3000.00</precioTotalSinImpuesto>
+  <precioTotalSinImpuesto>42.50</precioTotalSinImpuesto>
   <detallesAdicionales>
-    <detAdicional valor="desarrollo de software" nombre="informacionAdicional"/>
+    <detAdicional valor="UNIDAD" nombre="Unidad"/>
   </detallesAdicionales>
   <impuestos>
     <impuesto>
       <codigo>2</codigo>
-      <codigoPorcentaje>0</codigoPorcentaje>
-      <tarifa>0.00</tarifa>
-      <baseImponible>3000.00</baseImponible>
-      <valor>0.00</valor>
+      <codigoPorcentaje>2</codigoPorcentaje>
+      <tarifa>12.00</tarifa>
+      <baseImponible>42.50</baseImponible>
+      <valor>5.10</valor>
     </impuesto>
   </impuestos>
 </detalle>

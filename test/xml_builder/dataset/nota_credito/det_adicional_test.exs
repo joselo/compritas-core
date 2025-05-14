@@ -13,8 +13,8 @@ defmodule BillingCore.Dataset.NotaCredito.DetAdicionalTest do
   end
 
   test "new", %{det_adicional: det_adicional} do
-    assert det_adicional.nombre == "informacionAdicional"
-    assert det_adicional.valor == "desarrollo de software"
+    assert det_adicional.nombre == "Unidad"
+    assert det_adicional.valor == "UNIDAD"
   end
 
   test "to_doc", %{det_adicional: det_adicional} do
@@ -29,7 +29,7 @@ defmodule BillingCore.Dataset.NotaCredito.DetAdicionalTest do
 
   test "to_xml", %{det_adicional: det_adicional} do
     xml_expected =
-      File.read!("test/fixtures/det_adicional.xml")
+      File.read!("test/fixtures/nota_credito/det_adicional.xml")
       |> XmlSupport.format()
 
     xml =

@@ -19,6 +19,7 @@ defmodule BillingCore.Dataset.NotaCredito.InfoTributaria do
     field(:pto_emi, :integer)
     field(:secuencial, :integer)
     field(:dir_matriz, :string)
+    field(:agente_retencion, :integer)
 
     embeds_one(:clave, ClaveAcceso)
   end
@@ -35,7 +36,8 @@ defmodule BillingCore.Dataset.NotaCredito.InfoTributaria do
       :estab,
       :pto_emi,
       :secuencial,
-      :dir_matriz
+      :dir_matriz,
+      :agente_retencion
     ])
     |> validate_required([
       :ambiente,
@@ -59,9 +61,7 @@ defmodule BillingCore.Dataset.NotaCredito.InfoTributaria do
     pto_emi = info_tributaria.pto_emi |> Integer.to_string() |> String.pad_leading(3, "0")
     secuencial = info_tributaria.secuencial |> Integer.to_string() |> String.pad_leading(9, "0")
 
-    {
-      :infoTributaria,
-      nil,
+    doc =
       [
         {:ambiente, nil, info_tributaria.ambiente},
         {:tipoEmision, nil, info_tributaria.tipo_emision},
@@ -75,6 +75,12 @@ defmodule BillingCore.Dataset.NotaCredito.InfoTributaria do
         {:secuencial, nil, secuencial},
         {:dirMatriz, nil, info_tributaria.dir_matriz}
       ]
+      |> add_agente_retencion(info_tributaria)
+
+    {
+      :infoTributaria,
+      nil,
+      doc
     }
   end
 
@@ -92,5 +98,15 @@ defmodule BillingCore.Dataset.NotaCredito.InfoTributaria do
       :error ->
         changeset
     end
+  end
+
+  defp add_agente_retencion(doc, %{agente_retencion: nil}), do: doc
+
+  defp add_agente_retencion(doc, %{
+         agente_retencion: agente_retencion
+       }) do
+    agente_retencion = agente_retencion |> Integer.to_string() |> String.pad_leading(8, "0")
+
+    List.insert_at(doc, 2, {:agente_retencion, nil, agente_retencion})
   end
 end

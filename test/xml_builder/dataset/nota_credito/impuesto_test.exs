@@ -30,7 +30,7 @@ defmodule BillingCore.Dataset.NotaCredito.ImpuestoTest do
 
   test "to_xml", %{impuesto: impuesto} do
     xml_expected =
-      File.read!("test/fixtures/impuesto.xml")
+      File.read!("test/fixtures/nota_credito/impuesto.xml")
       |> XmlSupport.format()
 
     xml =

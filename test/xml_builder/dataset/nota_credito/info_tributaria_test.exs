@@ -57,12 +57,16 @@ defmodule BillingCore.Dataset.NotaCredito.InfoTributariaTest do
     pto_emi = info_tributaria.pto_emi |> Integer.to_string() |> String.pad_leading(3, "0")
     secuencial = info_tributaria.secuencial |> Integer.to_string() |> String.pad_leading(9, "0")
 
+    agente_retencion =
+      info_tributaria.agente_retencion |> Integer.to_string() |> String.pad_leading(8, "0")
+
     doc_expected = {
       :infoTributaria,
       nil,
       [
         {:ambiente, nil, info_tributaria.ambiente},
         {:tipoEmision, nil, info_tributaria.tipo_emision},
+        {:agente_retencion, nil, agente_retencion},
         {:razonSocial, nil, info_tributaria.razon_social},
         {:nombreComercial, nil, info_tributaria.nombre_comercial},
         {:ruc, nil, info_tributaria.ruc},
@@ -80,7 +84,7 @@ defmodule BillingCore.Dataset.NotaCredito.InfoTributariaTest do
 
   test "to_xml", %{info_tributaria: info_tributaria} do
     xml_expected =
-      File.read!("test/fixtures/info_tributaria.xml")
+      File.read!("test/fixtures/nota_credito/info_tributaria.xml")
       |> XmlSupport.format()
 
     xml =

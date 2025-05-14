@@ -15,48 +15,56 @@ defmodule BillingCore.Dataset.NotaCredito.Test.FactorySupport do
 
   def info_tributaria_factory do
     %InfoTributaria{
-      ambiente: 1,
+      ambiente: 2,
       tipo_emision: 1,
-      razon_social: "CARRION JUMBO JOSE AUGUSTO",
-      nombre_comercial: "INITMAIN",
-      ruc: "1103671804001",
-      clave_acceso: "0307202001110367180400110010010000000330000000119",
-      cod_doc: 1,
+      razon_social: "ENRIQUE ULLAURI MATERIALES DE CONSTRUCCION CIA LTDA",
+      nombre_comercial: "ENRIQUE ULLAURI CIA. LTDA.",
+      ruc: "1191714098001",
+      clave_acceso: "1603202304119171409800120011000000064601234567811",
+      cod_doc: 4,
       estab: 1,
-      pto_emi: 100,
-      secuencial: 33,
-      dir_matriz: "Ciudadela: DAMMER II Calle: N49C Número: EC-102 Intersección: EL MORLAN"
+      pto_emi: 1,
+      secuencial: 6460,
+      dir_matriz: "BOLIVAR Y AV CATAMAYO",
+      agente_retencion: 1
+    }
+  end
+
+  def total_without_impuesto_factory do
+    %TotalImpuesto{
+      codigo: 2,
+      codigo_porcentaje: 0,
+      base_imponible: 0.0,
+      valor: 0.0
     }
   end
 
   def total_impuesto_factory do
     %TotalImpuesto{
       codigo: 2,
-      codigo_porcentaje: 0,
-      base_imponible: 3000.00,
-      valor: 0.00
+      codigo_porcentaje: 2,
+      base_imponible: 42.5,
+      valor: 5.1
     }
   end
 
   def info_nota_credito_factory do
-    {:ok, fecha_emision} = Date.new(2020, 7, 3)
+    {:ok, fecha_emision} = Date.new(2023, 3, 16)
 
     %InfoNotaCredito{
       fecha_emision: fecha_emision,
-      dir_establecimiento:
-        "Ciudadela: DAMMER II Calle: N49C Número: EC-102 Intersección: EL MORLAN",
-      tipo_identificacion_comprador: 8,
-      razon_social_comprador: "Novaux Inc.",
-      identificacion_comprador: 465_219_513,
-      obligado_contabilidad: "NO",
-      total_sin_impuestos: 3000.00,
-      total_con_impuestos: [total_impuesto_factory()],
+      dir_establecimiento: "BOLIVAR Y AV CATAMAYO",
+      tipo_identificacion_comprador: 5,
+      razon_social_comprador: "CARRION MORA LUIS",
+      identificacion_comprador: 1_100_023_652,
+      obligado_contabilidad: "SI",
+      total_sin_impuestos: 42.5,
+      total_con_impuestos: [total_without_impuesto_factory(), total_impuesto_factory()],
       moneda: "DOLAR",
-      rise: "rise0",
-      cod_documento_modificado: "00",
-      num_documento_modificado: "000-000-000000000",
+      cod_documento_modificado: "01",
+      num_documento_modificado: "001-100-000246454",
       fecha_emision_doc_sustento: fecha_emision,
-      valor_modificacion: 3000.00,
+      valor_modificacion: 47.6,
       motivo: "motivo0"
     }
   end
@@ -65,38 +73,37 @@ defmodule BillingCore.Dataset.NotaCredito.Test.FactorySupport do
     struct!(
       info_nota_credito_factory(),
       %{
-        obligado_contabilidad: "SI",
-        contribuyente_especial: "666"
+        obligado_contabilidad: "SI"
       }
     )
   end
 
   def det_adicional_factory do
     %DetAdicional{
-      nombre: "informacionAdicional",
-      valor: "desarrollo de software"
+      nombre: "Unidad",
+      valor: "UNIDAD"
     }
   end
 
   def impuesto_factory do
     %Impuesto{
       codigo: 2,
-      codigo_porcentaje: 0,
-      tarifa: 0.00,
-      base_imponible: 3000.00,
-      valor: 0.00
+      codigo_porcentaje: 2,
+      tarifa: 12.0,
+      base_imponible: 42.5,
+      valor: 5.1
     }
   end
 
   def detalle_factory do
     %Detalle{
-      codigo_interno: 831_410_399,
-      codigo_adicional: 2,
-      descripcion: "SERVICIOS PROFESIONALES NOVAUX INC.",
-      cantidad: 1.0,
-      precio_unitario: 3000.00,
-      descuento: 0.00,
-      precio_total_sin_impuesto: 3000.00,
+      codigo_interno: "00005158",
+      codigo_adicional: "00005158",
+      descripcion: "SIKA EMPASTE EXTERIOR 20KG",
+      cantidad: 2.0,
+      precio_unitario: 21.25,
+      descuento: 0.0,
+      precio_total_sin_impuesto: 42.5,
       detalles_adicionales: [det_adicional_factory()],
       impuestos: [impuesto_factory()]
     }
@@ -117,28 +124,42 @@ defmodule BillingCore.Dataset.NotaCredito.Test.FactorySupport do
   end
 
   def nota_credito_factory do
-    campo_adicional1 = campo_adicional_factory("Direccion", "East 109 St - 6J Manhattan NY")
-    campo_adicional2 = campo_adicional_factory("Email", "javier@saborpos.com")
+    campo_adicional1 = campo_adicional_factory("DIRECCION", "CALLE BOLIVAR Y ROSALES")
+    campo_adicional2 = campo_adicional_factory("TELEFONO", "0960046802")
+    campo_adicional3 = campo_adicional_factory("E-MAIL", "joseloc@gmail.com")
+
+    campo_adicional4 =
+      campo_adicional_factory("COMENTARIO", " POR CAMBIO\DEVOLUCION SE EMITIRA NC")
+
+    campo_adicional5 = campo_adicional_factory("AGENTE DE RETENCION", "00000001")
 
     %NotaCredito{
       info_tributaria: info_tributaria_factory(),
       info_nota_credito: info_nota_credito_factory(),
       detalles: [detalle_factory()],
-      info_adicional: [campo_adicional1, campo_adicional2]
+      info_adicional: [
+        campo_adicional1,
+        campo_adicional2,
+        campo_adicional3,
+        campo_adicional4,
+        campo_adicional5
+      ]
     }
   end
 
   def clave_factory do
+    {:ok, fecha_emision} = Date.new(2023, 3, 16)
+
     %ClaveAcceso{
-      fecha_emision: Date.utc_today(),
-      tipo_comprobante: 1,
-      ruc: "1103671804001",
-      ambiente: 1,
+      fecha_emision: fecha_emision,
+      tipo_comprobante: 4,
+      ruc: "1191714098001",
+      ambiente: 2,
       estab: 1,
-      pto_emi: 1,
-      secuencial: 33,
+      pto_emi: 100,
+      secuencial: 6460,
       codigo: 1,
-      tipo_emision: 1
+      tipo_emision: 4
     }
   end
 end

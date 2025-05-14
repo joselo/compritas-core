@@ -36,6 +36,7 @@ defmodule BillingCore.Dataset.NotaCredito.InfoNotaCreditoTest do
       [
         {:fechaEmision, nil, fecha_emision},
         {:dirEstablecimiento, nil, info_nota_credito.dir_establecimiento},
+        {:contribuyenteEspecial, nil, nil},
         {:tipoIdentificacionComprador, nil,
          info_nota_credito.tipo_identificacion_comprador
          |> Integer.to_string()
