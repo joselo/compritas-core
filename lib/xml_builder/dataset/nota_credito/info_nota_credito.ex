@@ -21,7 +21,7 @@ defmodule BillingCore.Dataset.NotaCredito.InfoNotaCredito do
     field(:num_documento_modificado, :string)
     field(:fecha_emision_doc_sustento, :date)
     field(:total_sin_impuestos, :float)
-    field(:valor_modificacion, :string)
+    field(:valor_modificacion, :float)
     field(:moneda, :string)
     field(:motivo, :string)
 
@@ -53,9 +53,6 @@ defmodule BillingCore.Dataset.NotaCredito.InfoNotaCredito do
       :tipo_identificacion_comprador,
       :razon_social_comprador,
       :identificacion_comprador,
-      :contribuyente_especial,
-      :obligado_contabilidad,
-      :rise,
       :cod_documento_modificado,
       :num_documento_modificado,
       :fecha_emision_doc_sustento,
@@ -89,7 +86,8 @@ defmodule BillingCore.Dataset.NotaCredito.InfoNotaCredito do
          format_fecha_emision(info_nota_credito.fecha_emision_doc_sustento)},
         {:totalSinImpuestos, nil,
          :erlang.float_to_binary(info_nota_credito.total_sin_impuestos, decimals: decimals)},
-        {:valorModificacion, nil, info_nota_credito.valor_modificacion},
+        {:valorModificacion, nil,
+         :erlang.float_to_binary(info_nota_credito.valor_modificacion, decimals: decimals)},
         {:moneda, nil, info_nota_credito.moneda},
         {:motivo, nil, info_nota_credito.motivo},
         {:totalConImpuestos, nil,
