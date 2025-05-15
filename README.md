@@ -60,3 +60,13 @@ Este proyecto está licenciado bajo la Licencia MIT. Ver el archivo [LICENSE](LI
 ## Contacto
 
 Para preguntas o soporte, por favor abre un issue en el repositorio de GitHub.
+
+## Sandbox Testing
+
+
+``` bash
+# Ejecuta todo el proceso de facturacion en el entorno de pruebas del SRI
+mix run sandbox/test_invoice.exs
+
+# Ejecuta todo el proceso de nota de credito en el entorno de pruebas del SRI
+mix run sandbox/test_credit_note.exs
