@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nota_credito id="comprobante" version="1.0.0">
+  <infoTributaria>
+    <ambiente>1</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>CARRION JUMBO JOSE AUGUSTO</razonSocial>
+    <nombreComercial>INITMAIN</nombreComercial>
+    <ruc>1103671804001</ruc>
+    <claveAcceso>1505202501110367180400110010010000000010000000117</claveAcceso>
+    <codDoc>01</codDoc>
+    <estab>001</estab>
+    <ptoEmi>001</ptoEmi>
+    <secuencial>000000001</secuencial>
+    <dirMatriz>Ciudadela: DAMMER II Calle: N49C Número: EC-102 Intersección: EL MORLAN</dirMatri
+z>
+  </infoTributaria>
+  <infoNotaCredito>
+    <fechaEmision>15/05/2025</fechaEmision>
+    <dirEstablecimiento>Ciudadela: DAMMER II Calle: N49C Número: EC-102 Intersección: EL MORLAN
+    </dirEstablecimiento>
+    <tipoIdentificacionComprador>08</tipoIdentificacionComprador>
+    <razonSocialComprador>Novaux Inc.</razonSocialComprador>
+    <identificacionComprador>465219513</identificacionComprador>
+    <obligadoContabilidad>NO</obligadoContabilidad>
+    <codDocumentoModificado>001</codDocumentoModificado>
+    <numDocumentoModificado>001-100-000000433</numDocumentoModificado>
+    <fechaEmisionDocSustento>15/05/2025</fechaEmisionDocSustento>
+    <totalSinImpuestos>5.00</totalSinImpuestos>
+    <valorModificacion>5.00</valorModificacion>
+    <moneda>DOLAR</moneda>
+    <motivo>motivo0</motivo>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>0</codigoPorcentaje>
+        <baseImponible>5.00</baseImponible>
+        <valor>0.00</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+  </infoNotaCredito>
+  <detalles>
+    <detalle>
+      <codigoInterno>831410399</codigoInterno>
+      <codigoAdicional>2</codigoAdicional>
+      <descripcion>SERVICIOS PROFESIONALES NOVAUX INC.</descripcion>
+      <cantidad>1.0</cantidad>
+      <precioUnitario>5.00</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>5.00</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional valor="desarrollo de software" nombre="informacionAdicional"/>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.00</tarifa>
+          <baseImponible>5.00</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+  <infoAdicional>
+    <campoAdicional nombre="Direccion">East 109 St - 6J Manhattan NY</campoAdicional>
+    <campoAdicional nombre="Email">javier@saborpos.com</campoAdicional>
+  </infoAdicional>
+</nota_credito>
