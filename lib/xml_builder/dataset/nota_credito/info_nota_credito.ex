@@ -79,9 +79,8 @@ defmodule BillingCore.Dataset.NotaCredito.InfoNotaCredito do
         {:razonSocialComprador, nil, info_nota_credito.razon_social_comprador},
         {:identificacionComprador, nil, info_nota_credito.identificacion_comprador},
         {:obligadoContabilidad, nil, info_nota_credito.obligado_contabilidad},
-        {:rise, nil, info_nota_credito.rise},
         {:codDocumentoModificado, nil, info_nota_credito.cod_documento_modificado},
-        {:numDocumentoModificado, nil, info_nota_credito.cod_documento_modificado},
+        {:numDocumentoModificado, nil, info_nota_credito.num_documento_modificado},
         {:fechaEmisionDocSustento, nil,
          format_fecha_emision(info_nota_credito.fecha_emision_doc_sustento)},
         {:totalSinImpuestos, nil,
@@ -94,6 +93,7 @@ defmodule BillingCore.Dataset.NotaCredito.InfoNotaCredito do
          total_con_impuestos_to_doc(info_nota_credito.total_con_impuestos)}
       ]
       |> add_contribuyente_especial(info_nota_credito)
+      |> add_rise(info_nota_credito)
 
     {
       :infoNotaCredito,
@@ -127,4 +127,12 @@ defmodule BillingCore.Dataset.NotaCredito.InfoNotaCredito do
   end
 
   defp add_contribuyente_especial(doc, %{obligado_contabilidad: _}), do: doc
+
+  defp add_rise(doc, %{rise: nil}), do: doc
+
+  defp add_rise(doc, %{
+         rise: rise
+       }) do
+    List.insert_at(doc, 2, {:rise, nil, rise})
+  end
 end

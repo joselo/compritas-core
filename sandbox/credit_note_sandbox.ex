@@ -10,7 +10,6 @@ defmodule BillingCore.CreditNoteSandbox do
       {:ok, %{status: sri_status, response: response}} <- BillingCore.SriClient.send_document(xml_signed, environment),
        {:ok, %{status: authorization_status, response: authorization_response}} <- BillingCore.SriClient.is_authorized(access_key, environment) do
 
-
       IO.puts xml
 
       IO.puts "Access Key:"
@@ -102,8 +101,7 @@ defmodule BillingCore.CreditNoteSandbox do
         num_documento_modificado: "001-100-000000433",
         fecha_emision_doc_sustento: "2025-05-15",
         valor_modificacion: 5.0,
-        motivo: "motivo0",
-        rise: "rise0"
+        motivo: "motivo0"
       }
     }
   end
