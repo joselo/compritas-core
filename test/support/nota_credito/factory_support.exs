@@ -61,8 +61,8 @@ defmodule BillingCore.Dataset.NotaCredito.Test.FactorySupport do
       total_sin_impuestos: 42.5,
       total_con_impuestos: [total_without_impuesto_factory(), total_impuesto_factory()],
       moneda: "DOLAR",
-      cod_documento_modificado: "01",
-      num_documento_modificado: "001-100-000246454",
+      cod_doc_modificado: "01",
+      num_doc_modificado: "001-100-000246454",
       fecha_emision_doc_sustento: fecha_emision,
       valor_modificacion: 47.6,
       motivo: "motivo0"

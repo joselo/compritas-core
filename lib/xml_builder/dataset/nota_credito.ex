@@ -30,7 +30,7 @@ defmodule BillingCore.Dataset.NotaCredito do
 
   def to_doc(%BillingCore.Dataset.NotaCredito{} = nota_credito) do
     {
-      :nota_credito,
+      :notaCredito,
       %{id: "comprobante", version: "1.0.0"},
       [
         InfoTributaria.to_doc(nota_credito.info_tributaria),

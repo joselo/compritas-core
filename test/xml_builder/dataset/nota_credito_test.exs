@@ -30,7 +30,7 @@ defmodule BillingCore.Dataset.NotaCreditoTest do
       |> Enum.map(fn info -> CampoAdicional.to_doc(info) end)
 
     doc_expected = {
-      :nota_credito,
+      :notaCredito,
       %{id: "comprobante", version: "1.0.0"},
       [
         InfoTributaria.to_doc(nota_credito.info_tributaria),

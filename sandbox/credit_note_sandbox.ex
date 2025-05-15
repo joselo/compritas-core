@@ -6,11 +6,9 @@ defmodule BillingCore.CreditNoteSandbox do
     p12_password = System.get_env("TEST_P12_FILE_PASSWORD")
 
     with {:ok, [xml: xml, clave_acceso: access_key]} <- BillingCore.XmlCreditNoteBuilder.build_credit_note(credit_note_params),
-      {:ok, xml_signed} <- BillingCore.Signing.sign(xml, p12_path, p12_password),
+    {:ok, xml_signed} <- BillingCore.Signing.sign(xml, p12_path, p12_password),
       {:ok, %{status: sri_status, response: response}} <- BillingCore.SriClient.send_document(xml_signed, environment),
        {:ok, %{status: authorization_status, response: authorization_response}} <- BillingCore.SriClient.is_authorized(access_key, environment) do
-
-      IO.puts xml
 
       IO.puts "Access Key:"
       IO.puts access_key
@@ -30,6 +28,9 @@ defmodule BillingCore.CreditNoteSandbox do
       IO.puts "Auhorization Response"
       IO.puts authorization_status
       IO.puts authorization_response
+    else
+      error ->
+        IO.inspect error
     end
   end
 
@@ -41,7 +42,7 @@ defmodule BillingCore.CreditNoteSandbox do
         razon_social: "CARRION JUMBO JOSE AUGUSTO",
         nombre_comercial: "INITMAIN",
         ruc: "1103671804001",
-        cod_doc: 1,
+        cod_doc: 4, # 4=Nota de Compra
         estab: 1,
         pto_emi: 1,
         secuencial: 1,
@@ -55,7 +56,7 @@ defmodule BillingCore.CreditNoteSandbox do
           secuencial: 1,
           codigo: 1,
           fecha_emision: "2025-05-15",
-          tipo_comprobante: 1
+          tipo_comprobante: 4 # 4=Nota de compra
         }
       },
       detalles: [
@@ -88,7 +89,7 @@ defmodule BillingCore.CreditNoteSandbox do
       info_nota_credito: %{
         fecha_emision: "2025-05-15",
         dir_establecimiento: "Ciudadela: DAMMER II Calle: N49C Número: EC-102 Intersección: EL MORLAN",
-        obligado_contabilidad: "NO",
+        # obligado_contabilidad: "NO",
         tipo_identificacion_comprador: 8,
         razon_social_comprador: "Novaux Inc.",
         identificacion_comprador: "465219513",
@@ -97,11 +98,11 @@ defmodule BillingCore.CreditNoteSandbox do
           %{codigo: 2, codigo_porcentaje: 0, base_imponible: 5.0, valor: 0.0}
         ],
         moneda: "DOLAR",
-        cod_documento_modificado: "001",
-        num_documento_modificado: "001-100-000000433",
+        cod_doc_modificado: "01", # 01=Factura
+        num_doc_modificado: "001-100-000000433",
         fecha_emision_doc_sustento: "2025-05-15",
         valor_modificacion: 5.0,
-        motivo: "motivo0"
+        motivo: "NOTA DE CREDITO POR DEVOLUCION DE PRODUCTOS"
       }
     }
   end

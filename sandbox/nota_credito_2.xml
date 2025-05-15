@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nota_credito id="comprobante" version="1.0.0">
+<notaCredito id="comprobante" version="1.0.0">
   <infoTributaria>
     <ambiente>1</ambiente>
     <tipoEmision>1</tipoEmision>
@@ -11,24 +11,20 @@
     <estab>001</estab>
     <ptoEmi>001</ptoEmi>
     <secuencial>000000001</secuencial>
-    <dirMatriz>Ciudadela: DAMMER II Calle: N49C Número: EC-102 Intersección: EL MORLAN</dirMatri
-z>
+    <dirMatriz>Ciudadela: DAMMER II Calle: N49C Número: EC-102 Intersección: EL MORLAN</dirMatriz>
   </infoTributaria>
   <infoNotaCredito>
     <fechaEmision>15/05/2025</fechaEmision>
-    <dirEstablecimiento>Ciudadela: DAMMER II Calle: N49C Número: EC-102 Intersección: EL MORLAN
-    </dirEstablecimiento>
+    <dirEstablecimiento>Ciudadela: DAMMER II Calle: N49C Número: EC-102 Intersección: EL MORLAN</dirEstablecimiento>
     <tipoIdentificacionComprador>08</tipoIdentificacionComprador>
     <razonSocialComprador>Novaux Inc.</razonSocialComprador>
     <identificacionComprador>465219513</identificacionComprador>
-    <obligadoContabilidad>NO</obligadoContabilidad>
-    <codDocumentoModificado>001</codDocumentoModificado>
-    <numDocumentoModificado>001-100-000000433</numDocumentoModificado>
+    <codDocModificado>001</codDocModificado>
+    <numDocModificado>001-100-000000433</numDocModificado>
     <fechaEmisionDocSustento>15/05/2025</fechaEmisionDocSustento>
     <totalSinImpuestos>5.00</totalSinImpuestos>
     <valorModificacion>5.00</valorModificacion>
     <moneda>DOLAR</moneda>
-    <motivo>motivo0</motivo>
     <totalConImpuestos>
       <totalImpuesto>
         <codigo>2</codigo>
@@ -37,6 +33,7 @@ z>
         <valor>0.00</valor>
       </totalImpuesto>
     </totalConImpuestos>
+    <motivo>motivo0</motivo>
   </infoNotaCredito>
   <detalles>
     <detalle>
@@ -65,4 +62,4 @@ z>
     <campoAdicional nombre="Direccion">East 109 St - 6J Manhattan NY</campoAdicional>
     <campoAdicional nombre="Email">javier@saborpos.com</campoAdicional>
   </infoAdicional>
-</nota_credito>
+</notaCredito>
