@@ -36,14 +36,12 @@ defmodule BillingCore.Dataset.NotaCredito.InfoNotaCreditoTest do
       [
         {:fechaEmision, nil, fecha_emision},
         {:dirEstablecimiento, nil, info_nota_credito.dir_establecimiento},
-        {:contribuyenteEspecial, nil, nil},
         {:tipoIdentificacionComprador, nil,
          info_nota_credito.tipo_identificacion_comprador
          |> Integer.to_string()
          |> String.pad_leading(2, "0")},
         {:razonSocialComprador, nil, info_nota_credito.razon_social_comprador},
         {:identificacionComprador, nil, info_nota_credito.identificacion_comprador},
-        {:obligadoContabilidad, nil, info_nota_credito.obligado_contabilidad},
         {:codDocModificado, nil, info_nota_credito.cod_doc_modificado},
         {:numDocModificado, nil, info_nota_credito.num_doc_modificado},
         {:fechaEmisionDocSustento, nil, fecha_emision_doc_sustento},
@@ -52,8 +50,8 @@ defmodule BillingCore.Dataset.NotaCredito.InfoNotaCreditoTest do
         {:valorModificacion, nil,
          :erlang.float_to_binary(info_nota_credito.valor_modificacion, decimals: 2)},
         {:moneda, nil, info_nota_credito.moneda},
-        {:motivo, nil, info_nota_credito.motivo},
-        {:totalConImpuestos, nil, total_con_impuestos}
+        {:totalConImpuestos, nil, total_con_impuestos},
+        {:motivo, nil, info_nota_credito.motivo}
       ]
     }
 
@@ -83,14 +81,13 @@ defmodule BillingCore.Dataset.NotaCredito.InfoNotaCreditoTest do
       [
         {:fechaEmision, nil, fecha_emision},
         {:dirEstablecimiento, nil, info_nota_credito.dir_establecimiento},
-        {:contribuyenteEspecial, nil, info_nota_credito.contribuyente_especial},
+        {:obligadoContabilidad, nil, info_nota_credito.obligado_contabilidad},
         {:tipoIdentificacionComprador, nil,
          info_nota_credito.tipo_identificacion_comprador
          |> Integer.to_string()
          |> String.pad_leading(2, "0")},
         {:razonSocialComprador, nil, info_nota_credito.razon_social_comprador},
         {:identificacionComprador, nil, info_nota_credito.identificacion_comprador},
-        {:obligadoContabilidad, nil, info_nota_credito.obligado_contabilidad},
         {:codDocModificado, nil, info_nota_credito.cod_doc_modificado},
         {:numDocModificado, nil, info_nota_credito.num_doc_modificado},
         {:fechaEmisionDocSustento, nil, fecha_emision_doc_sustento},
@@ -99,8 +96,8 @@ defmodule BillingCore.Dataset.NotaCredito.InfoNotaCreditoTest do
         {:valorModificacion, nil,
          :erlang.float_to_binary(info_nota_credito.valor_modificacion, decimals: 2)},
         {:moneda, nil, info_nota_credito.moneda},
-        {:motivo, nil, info_nota_credito.motivo},
-        {:totalConImpuestos, nil, total_con_impuestos}
+        {:totalConImpuestos, nil, total_con_impuestos},
+        {:motivo, nil, info_nota_credito.motivo}
       ]
     }
 

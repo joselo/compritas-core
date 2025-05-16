@@ -57,7 +57,7 @@ defmodule BillingCore.Dataset.NotaCredito.Test.FactorySupport do
       tipo_identificacion_comprador: 5,
       razon_social_comprador: "CARRION MORA LUIS",
       identificacion_comprador: 1_100_023_652,
-      obligado_contabilidad: "SI",
+      obligado_contabilidad: "NO",
       total_sin_impuestos: 42.5,
       total_con_impuestos: [total_without_impuesto_factory(), total_impuesto_factory()],
       moneda: "DOLAR",

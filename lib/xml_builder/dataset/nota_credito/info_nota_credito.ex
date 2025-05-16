@@ -118,11 +118,17 @@ defmodule BillingCore.Dataset.NotaCredito.InfoNotaCredito do
     [day, month, fecha_emision.year] |> Enum.join("/")
   end
 
-  defp add_contribuyente_especial(doc, %{
-         obligado_contabilidad: "SI",
-         contribuyente_especial: contribuyente_especial
-       }) do
-    List.insert_at(doc, 2, {:contribuyenteEspecial, nil, contribuyente_especial})
+  defp add_contribuyente_especial(
+         doc,
+         %{
+           obligado_contabilidad: "SI"
+         } = info_nota_credito
+       ) do
+    if contribuyente_especial = info_nota_credito.contribuyente_especial do
+      List.insert_at(doc, 2, {:contribuyenteEspecial, nil, contribuyente_especial})
+    else
+      List.insert_at(doc, 2, {:obligadoContabilidad, nil, "SI"})
+    end
   end
 
   defp add_contribuyente_especial(doc, %{obligado_contabilidad: _}), do: doc
