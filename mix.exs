@@ -21,13 +21,13 @@ defmodule BillingCore.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ecto_sql, "~> 3.12.1"},
-      {:xml_builder, "~> 2.3.0"},
-      {:httpoison, "~> 2.2.1"},
-      {:timex, "~> 3.7.11"},
+      {:ecto_sql, "~> 3.13.2"},
+      {:xml_builder, "~> 2.4.0"},
+      {:httpoison, "~> 2.2.3"},
+      {:timex, "~> 3.7.13"},
       {:xmerl_c14n, "~> 0.2.0"},
       {:sweet_xml, "~> 0.7.4"},
-      {:mimic, "~> 1.10.2", only: :test},
+      {:mimic, "~> 2.0.0", only: :test},
       {:poison, "~> 6.0.0"},
       {:elixir_xml_to_map, "~> 3.1.0"},
       {:pdf, "~> 0.7.1"},
