@@ -10,12 +10,14 @@ defmodule BillingCore.Xbes.CertificateTest do
     {:ok, pem_file: pem_file, pem: pem}
   end
 
-  test "issuer_name_from_pem with bank data pem file", %{pem: pem} do
-    expected_result =
-      "L=QUITO, CN=AC BANCO CENTRAL DEL ECUADOR, OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE, O=BANCO CENTRAL DEL ECUADOR, C=EC"
+  test "issuer_name_from_pem with bank data pem file", %{pem_file: pem_file} do
+    #expected_result =
+    #  "L=QUITO, CN=AC BANCO CENTRAL DEL ECUADOR, OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE, O=BANCO CENTRAL DEL ECUADOR, C=EC"
+
+    expected_result = "C = EC, O = BANCO CENTRAL DEL ECUADOR, OU = ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE, L = QUITO, CN = AC BANCO CENTRAL DEL ECUADOR"
 
     result =
-      pem
+      pem_file
       |> Certificate.issuer_name_from_pem()
       |> String.split(", ")
       |> Enum.all?(fn value ->
@@ -23,6 +25,16 @@ defmodule BillingCore.Xbes.CertificateTest do
       end)
 
     assert result
+
+    # result =
+    #   pem_file
+    #   |> Certificate.issuer_name_from_pem()
+    #   |> String.split(", ")
+    #   |> Enum.all?(fn value ->
+    #     String.contains?(expected_result, value)
+    #   end)
+
+    # assert result
   end
 
   ## Se comento ya que el certificado es informacion sensible y no se incluye en el codigo

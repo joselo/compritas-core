@@ -7,7 +7,7 @@ defmodule BillingCore.Xbes.P12.Certificate do
     rsa = public_key_from_pem(pem)
 
     %{
-      issuer_name: issuer_name_from_pem(pem),
+      issuer_name: issuer_name_from_pem(pem_file),
       x509: x509_from_pem(pem),
       serial_number: serial_number_from_pem(pem),
       digest: digest_from_pem(pem),
@@ -59,16 +59,21 @@ defmodule BillingCore.Xbes.P12.Certificate do
   end
 
   # Reference Codes: https://www.cryptosys.net/pki/manpki/pki_distnames.html
-  def issuer_name_from_pem(pem) do
-    ssl =
-      pem
-      |> List.wrap()
-      |> :public_key.pem_encode()
-      |> EasySSL.parse_pem()
-
-    ssl[:issuer].aggregated
+  def issuer_name_from_pem(pem_file) do
+    Regex.run(~r/^issuer=(.+)$/m, pem_file)
+    |> List.last()
     |> String.replace(~r/[\/]/, ", ")
-    |> String.replace(~r/^, /, "")
+    |> String.replace(~r/^, /, "")    
+
+    # ssl =
+    #   pem
+    #   |> List.wrap()
+    #   |> :public_key.pem_encode()
+    #   |> EasySSL.parse_pem()
+
+    # ssl[:issuer].aggregated
+    # |> String.replace(~r/[\/]/, ", ")
+    # |> String.replace(~r/^, /, "")
   end
 
   def validity_from_pem(pem) do
