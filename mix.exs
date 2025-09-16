@@ -31,7 +31,6 @@ defmodule BillingCore.MixProject do
       {:poison, "~> 6.0.0"},
       {:elixir_xml_to_map, "~> 3.1.0"},
       {:pdf, "~> 0.7.1"},
-      #{:easy_ssl, github: "CaliDog/EasySSL", branch: "master"}
     ]
   end
 end
