@@ -30,7 +30,7 @@ defmodule BillingCore.MixProject do
       {:mimic, "~> 2.0.0", only: :test},
       {:poison, "~> 6.0.0"},
       {:elixir_xml_to_map, "~> 3.1.0"},
-      {:pdf, "~> 0.7.1"},
+      {:pdf, "~> 0.7.1"}
     ]
   end
 end

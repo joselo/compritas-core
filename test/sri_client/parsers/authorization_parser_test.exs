@@ -37,7 +37,7 @@ defmodule BillingCore.AuthorizationParserTest do
     test "returns unauthorized response if the response state is nil or empty", %{
       unauthorized_response_without_state: response
     } do
-      assert {:ok, %{status: "NO AUTORIZADO", response: _response}} =
+      assert {:ok, %{status: "NO ENCONTRADO O PENDIENTE", response: _response}} =
                AuthorizationParser.parse_response(response)
     end
 

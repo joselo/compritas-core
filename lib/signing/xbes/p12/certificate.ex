@@ -63,7 +63,7 @@ defmodule BillingCore.Xbes.P12.Certificate do
     Regex.run(~r/^issuer=(.+)$/m, pem_file)
     |> List.last()
     |> String.replace(~r/[\/]/, ", ")
-    |> String.replace(~r/^, /, "")    
+    |> String.replace(~r/^, /, "")
 
     # ssl =
     #   pem

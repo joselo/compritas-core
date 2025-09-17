@@ -15,7 +15,7 @@ defmodule BillingCore.AuthorizationParser do
     end
   end
 
-  defp verify_status(nil), do: "NO AUTORIZADO"
-  defp verify_status(""), do: "NO AUTORIZADO"
+  defp verify_status(nil), do: "NO ENCONTRADO O PENDIENTE"
+  defp verify_status(""), do: "NO ENCONTRADO O PENDIENTE"
   defp verify_status(status), do: status
 end

@@ -11,10 +11,11 @@ defmodule BillingCore.Xbes.CertificateTest do
   end
 
   test "issuer_name_from_pem with bank data pem file", %{pem_file: pem_file} do
-    #expected_result =
+    # expected_result =
     #  "L=QUITO, CN=AC BANCO CENTRAL DEL ECUADOR, OU=ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE, O=BANCO CENTRAL DEL ECUADOR, C=EC"
 
-    expected_result = "C = EC, O = BANCO CENTRAL DEL ECUADOR, OU = ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE, L = QUITO, CN = AC BANCO CENTRAL DEL ECUADOR"
+    expected_result =
+      "C = EC, O = BANCO CENTRAL DEL ECUADOR, OU = ENTIDAD DE CERTIFICACION DE INFORMACION-ECIBCE, L = QUITO, CN = AC BANCO CENTRAL DEL ECUADOR"
 
     result =
       pem_file
