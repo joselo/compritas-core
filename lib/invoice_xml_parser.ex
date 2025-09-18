@@ -66,18 +66,28 @@ defmodule BillingCore.InvoiceXmlParser do
   end
 
   def get_items(xml_struct) do
+    details = xml_struct["factura"]["#content"]["detalles"]["detalle"]
+
+    get_details_fn = fn item ->
+      [
+        item["codigoPrincipal"],
+        item["codigoAuxiliar"],
+        "#{item["descripcion"]}\n#{item["detallesAdicionales"]["detAdicional"]["-valor"]}",
+        item["precioUnitario"],
+        item["cantidad"],
+        item["descuento"],
+        item["precioTotalSinImpuesto"]
+      ]
+    end
+
     items =
-      Enum.map(xml_struct["factura"]["#content"]["detalles"]["detalle"], fn item ->
-        [
-          item["codigoPrincipal"],
-          item["codigoAuxiliar"],
-          "#{item["descripcion"]}\n#{item["detallesAdicionales"]["detAdicional"]["-valor"]}",
-          item["precioUnitario"],
-          item["cantidad"],
-          item["descuento"],
-          item["precioTotalSinImpuesto"]
-        ]
-      end)
+      if is_list(details) do
+        Enum.map(details, fn item ->
+          get_details_fn.(item)
+        end)
+      else
+        [get_details_fn.(details)]
+      end
 
     [@headers | items]
   end
