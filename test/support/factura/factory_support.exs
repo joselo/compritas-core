@@ -18,10 +18,10 @@ defmodule BillingCore.Dataset.Factura.Test.FactorySupport do
     %InfoTributaria{
       ambiente: 1,
       tipo_emision: 1,
-      razon_social: "CARRION JUMBO JOSE AUGUSTO",
+      razon_social: "TOMMY VERCETTI",
       nombre_comercial: "INITMAIN",
-      ruc: "1103671804001",
-      clave_acceso: "0307202001110367180400110010010000000330000000119",
+      ruc: "1111111111001",
+      clave_acceso: "0307202001111111111100110010010000000330000000119",
       cod_doc: 1,
       estab: 1,
       pto_emi: 100,
@@ -140,7 +140,7 @@ defmodule BillingCore.Dataset.Factura.Test.FactorySupport do
     %ClaveAcceso{
       fecha_emision: Date.utc_today(),
       tipo_comprobante: 1,
-      ruc: "1103671804001",
+      ruc: "1111111111001",
       ambiente: 1,
       estab: 1,
       pto_emi: 1,

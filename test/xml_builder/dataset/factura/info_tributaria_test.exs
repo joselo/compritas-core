@@ -33,9 +33,9 @@ defmodule BillingCore.Dataset.Factura.InfoTributariaTest do
     params = %{
       ambiente: 1,
       tipo_emision: 1,
-      razon_social: "CARRION JUMBO JOSE AUGUSTO",
+      razon_social: "TOMMY VERCETTI",
       nombre_comercial: "INITMAIN",
-      ruc: "1103671804001",
+      ruc: "1111111111001",
       cod_doc: 1,
       estab: 1,
       pto_emi: 100,

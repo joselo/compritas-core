@@ -6,7 +6,7 @@
         <autorizaciones>
           <autorizacion>
             <estado>NO AUTORIZADO</estado>
-            <numeroAutorizacion>2302202101110367180400110010010000000130000001310</numeroAutorizacion>
+            <numeroAutorizacion>2302202101111111111100110010010000000130000001310</numeroAutorizacion>
             <fechaAutorizacion>2021-02-23T12:03:18-05:00</fechaAutorizacion>
             <ambiente>PRUEBAS</ambiente>
             <comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?>

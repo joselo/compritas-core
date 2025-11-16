@@ -31,7 +31,7 @@ defmodule BillingCore.InvoiceXmlParserTest do
   end
 
   test "get_business_name/1 returns 'razonSocial'", %{xml_invoice: xml_invoice} do
-    assert InvoiceXmlParser.get_business_name(xml_invoice) == "CARRION JUMBO JOSE AUGUSTO"
+    assert InvoiceXmlParser.get_business_name(xml_invoice) == "TOMMY VERCETTI"
   end
 
   test "get_tradename/1 returns 'nombreComercial'", %{xml_invoice: xml_invoice} do
@@ -57,7 +57,7 @@ defmodule BillingCore.InvoiceXmlParserTest do
   end
 
   test "get_business_identification/1 returns 'RUC'", %{xml_invoice: xml_invoice} do
-    assert InvoiceXmlParser.get_business_identification(xml_invoice) == "1103671804001"
+    assert InvoiceXmlParser.get_business_identification(xml_invoice) == "1111111111001"
   end
 
   test "get_client_name/1 returns 'razonSocialComprador'", %{xml_invoice: xml_invoice} do
@@ -67,12 +67,12 @@ defmodule BillingCore.InvoiceXmlParserTest do
   test "get_client_identification/1 returns 'identificacionComprador'", %{
     xml_invoice: xml_invoice
   } do
-    assert InvoiceXmlParser.get_client_identification(xml_invoice) == "1103671804"
+    assert InvoiceXmlParser.get_client_identification(xml_invoice) == "1111111111"
   end
 
   test "get_access_key/1 returns 'claveAcceso'", %{xml_invoice: xml_invoice} do
     assert InvoiceXmlParser.get_access_key(xml_invoice) ==
-             "0206202101110367180400110010017965080853956024310"
+             "0206202101111111111100110010017965080853956024310"
   end
 
   test "get_environment/1 returns 'ambiente'", %{xml_invoice: xml_invoice} do
