@@ -1,0 +1,21 @@
+<detalle>
+  <codigoInterno>00005158</codigoInterno>
+  <codigoAdicional>00005158</codigoAdicional>
+  <descripcion>SIKA EMPASTE EXTERIOR 20KG</descripcion>
+  <cantidad>2.0</cantidad>
+  <precioUnitario>21.25</precioUnitario>
+  <descuento>0.00</descuento>
+  <precioTotalSinImpuesto>42.50</precioTotalSinImpuesto>
+  <detallesAdicionales>
+    <detAdicional valor="UNIDAD" nombre="Unidad"/>
+  </detallesAdicionales>
+  <impuestos>
+    <impuesto>
+      <codigo>2</codigo>
+      <codigoPorcentaje>2</codigoPorcentaje>
+      <tarifa>12.00</tarifa>
+      <baseImponible>42.50</baseImponible>
+      <valor>5.10</valor>
+    </impuesto>
+  </impuestos>
+</detalle>

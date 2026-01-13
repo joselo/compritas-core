@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<notaCredito id="comprobante" version="1.0.0">
+  <infoTributaria>
+    <ambiente>1</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>ENRIQUE ULLAURI MATERIALES DE CONSTRUCCION CIA LTDA</razonSocial>
+    <nombreComercial>ENRIQUE ULLAURI CIA. LTDA.</nombreComercial>
+    <ruc>1191714098001</ruc>
+    <claveAcceso>1505202504119171409800120011000000064601234567811</claveAcceso>
+    <codDoc>04</codDoc>
+    <estab>001</estab>
+    <ptoEmi>100</ptoEmi>
+    <secuencial>000006460</secuencial>
+    <dirMatriz>BOLIVAR Y AV CATAMAYO</dirMatriz>
+    <agenteRetencion>00000001</agenteRetencion>
+  </infoTributaria>
+  <infoNotaCredito>
+    <fechaEmision>15/05/2025</fechaEmision>
+    <dirEstablecimiento>BOLIVAR Y AV CATAMAYO</dirEstablecimiento>
+    <tipoIdentificacionComprador>05</tipoIdentificacionComprador>
+    <razonSocialComprador>CARRION MORA LUIS</razonSocialComprador>
+    <identificacionComprador>1100023652</identificacionComprador>
+    <codDocModificado>01</codDocModificado>
+    <numDocModificado>001-100-000246454</numDocModificado>
+    <fechaEmisionDocSustento>15/05/2025</fechaEmisionDocSustento>
+    <totalSinImpuestos>42.5</totalSinImpuestos>
+    <valorModificacion>47.6</valorModificacion>
+    <moneda>DOLAR</moneda>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>2</codigoPorcentaje>
+        <baseImponible>42.5</baseImponible>
+        <valor>5.1</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+    <motivo>NOTA DE CREDITO POR DEVOLUCION DE PRODUCTOS</motivo>
+  </infoNotaCredito>
+  <detalles>
+    <detalle>
+      <codigoInterno>00005158</codigoInterno>
+      <codigoAdicional>00005158</codigoAdicional>
+      <descripcion>SIKA EMPASTE EXTERIOR 20KG</descripcion>
+      <cantidad>2</cantidad>
+      <precioUnitario>21.25</precioUnitario>
+      <descuento>0</descuento>
+      <precioTotalSinImpuesto>42.5</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Unidad" valor="UNIDAD"></detAdicional>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>2</codigoPorcentaje>
+          <tarifa>12</tarifa>
+          <baseImponible>42.5</baseImponible>
+          <valor>5.1</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+  <infoAdicional>
+    <campoAdicional nombre="DIRECCION">CALLE BOLIVAR Y ROSALES</campoAdicional>
+  </infoAdicional>
+</notaCredito>

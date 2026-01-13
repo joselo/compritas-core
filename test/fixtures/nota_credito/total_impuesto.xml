@@ -1,0 +1,6 @@
+<totalImpuesto>
+  <codigo>2</codigo>
+  <codigoPorcentaje>2</codigoPorcentaje>
+  <baseImponible>42.50</baseImponible>
+  <valor>5.10</valor>
+</totalImpuesto>

@@ -1,0 +1,7 @@
+<impuesto>
+  <codigo>2</codigo>
+  <codigoPorcentaje>2</codigoPorcentaje>
+  <tarifa>12.00</tarifa>
+  <baseImponible>42.50</baseImponible>
+  <valor>5.10</valor>
+</impuesto>
