@@ -28,23 +28,24 @@ defmodule BillingCore.InvoicePdfBuilder do
 
   def build(xml_map, logo_path \\ nil, bar_code_path \\ nil) do
     document = xml_map.document
+    symbol = currency_symbol(document.currency)
 
     subtotals_by_rate =
       Enum.map(document.taxes, fn tax ->
         label = String.replace(tax.tax_label, "IVA", "SUBTOTAL")
-        [label, format_amount(tax.tax_value)]
+        [label, format_amount(tax.tax_value, symbol)]
       end)
 
-    subtotal_sin_impuesto = [["SUBTOTAL SIN IMPUESTO", format_amount(document.sub_total_without_taxes)]]
+    subtotal_sin_impuesto = [["SUBTOTAL SIN IMPUESTO", format_amount(document.sub_total_without_taxes, symbol)]]
 
-    descuento = [["DESCUENTO", format_amount(document.total_discount)]]
+    descuento = [["DESCUENTO", format_amount(document.total_discount, symbol)]]
 
     iva_by_rate =
       Enum.map(document.taxes, fn tax ->
-        [tax.tax_label, format_amount(tax.tax_total)]
+        [tax.tax_label, format_amount(tax.tax_total, symbol)]
       end)
 
-    grand_total = [["Total", format_amount(document.total)]]
+    grand_total = [["Total", format_amount(document.total, symbol)]]
 
     totals_table =
       subtotals_by_rate ++
@@ -54,16 +55,16 @@ defmodule BillingCore.InvoicePdfBuilder do
         grand_total
 
     # Format numeric columns in items table (indices 4-7: precio, cantidad, descuento, total)
-    # Row 0 is headers — skip it
+    # Row 0 is headers — skip it. Column 5 is quantity (no currency symbol).
     [header | item_rows] = document.items
 
     formatted_items =
       [header | Enum.map(item_rows, fn row ->
         row
-        |> List.update_at(4, &format_amount/1)
+        |> List.update_at(4, &format_amount(&1, symbol))
         |> List.update_at(5, &format_amount/1)
-        |> List.update_at(6, &format_amount/1)
-        |> List.update_at(7, &format_amount/1)
+        |> List.update_at(6, &format_amount(&1, symbol))
+        |> List.update_at(7, &format_amount(&1, symbol))
       end)]
 
     document =
@@ -155,22 +156,25 @@ defmodule BillingCore.InvoicePdfBuilder do
 
   defp add_footer(pdf, invoice) do
     %{width: width, height: _height} = Pdf.size(pdf)
-    cursor = Pdf.cursor(pdf) - 20
+    # items_bottom: exact cursor after items table — totals table starts here (no gap)
+    items_bottom = Pdf.cursor(pdf)
+    # text_cursor: with a small margin for left-side text sections
+    text_cursor = items_bottom - 20
     page_number = "#{Pdf.page_number(pdf)}"
 
     pdf =
       pdf
       |> Pdf.set_font_size(7)
 
-    {pdf, payment_cursor} = 
+    {pdf, payment_cursor} =
       if Map.get(invoice, :other_info, []) != [] do
         pdf =
           pdf
-          |> Pdf.text_at({50, cursor}, "Información Adicional", bold: true)
-          |> Pdf.text_wrap!({50, cursor - 10}, {240, 60}, Enum.join(invoice.other_info, "\n"))
-        {pdf, cursor - 80}
+          |> Pdf.text_at({50, text_cursor}, "Información Adicional", bold: true)
+          |> Pdf.text_wrap!({50, text_cursor - 10}, {240, 60}, Enum.join(invoice.other_info, "\n"))
+        {pdf, text_cursor - 80}
       else
-        {pdf, cursor}
+        {pdf, text_cursor}
       end
 
     pdf =
@@ -182,13 +186,13 @@ defmodule BillingCore.InvoicePdfBuilder do
       |> Pdf.text_at({50, payment_cursor - 40}, "Plazo: #{invoice.payments.due_date}")
       |> Pdf.text_at({50, payment_cursor - 50}, "Total: #{invoice.payments.total}")
 
-    # Totals
+    # Totals — placed flush against the items table (items_bottom, no extra gap)
     row_count = Map.get(invoice, :totals_row_count, 5)
     totals_height = max(row_count * 14, 60)
     last_row_index = row_count
 
     {pdf, _grid} =
-      Pdf.table(pdf, {400, cursor}, {150, totals_height}, invoice.totals_table,
+      Pdf.table(pdf, {400, items_bottom}, {150, totals_height}, invoice.totals_table,
         padding: 2,
         border: 0.1,
         cols: [
@@ -257,6 +261,9 @@ defmodule BillingCore.InvoicePdfBuilder do
 
   defp format_amount(value), do: to_string(value)
 
+  # format_amount/2 — prepends the currency symbol
+  defp format_amount(value, symbol), do: "#{symbol} #{format_amount(value)}"
+
   defp format_integer_part(integer_str) do
     {sign, digits} =
       if String.starts_with?(integer_str, "-") do
@@ -276,5 +283,17 @@ defmodule BillingCore.InvoicePdfBuilder do
       |> Enum.join()
 
     "#{sign}#{formatted}"
+  end
+
+  # Maps XML currency strings to display symbols.
+  # Extend this list to support additional currencies in the future.
+  defp currency_symbol(currency) do
+    case String.upcase(currency || "") do
+      "DOLAR" -> "$"
+      "USD" -> "$"
+      "EUR" -> "€"
+      "GBP" -> "£"
+      _ -> currency || ""
+    end
   end
 end
