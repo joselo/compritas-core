@@ -145,7 +145,7 @@ defmodule BillingCore.InvoicePdfBuilder do
       |> Pdf.text_at({490, 750}, invoice.emssion_type)
       |> Pdf.text_at({310, 735}, "Número de Autorización", bold: true)
       |> add_bar_code(bar_code_path)
-      |> Pdf.text_at({311, 700}, invoice.access_key)
+      |> Pdf.text_at({310, 700}, invoice.access_key)
       # ── Horizontal divider below header ─────────────────────────────
       |> Pdf.set_line_width(0.3)
       |> Pdf.line({50, 695}, {width - 50, 695})
@@ -292,7 +292,7 @@ defmodule BillingCore.InvoicePdfBuilder do
   defp add_bar_code(pdf, nil), do: pdf
 
   defp add_bar_code(pdf, image_path) do
-    Pdf.add_image(pdf, {310, 705}, image_path, width: 242, height: 28)
+    Pdf.add_image(pdf, {305, 705}, image_path, width: 235, height: 28)
   end
 
   defp format_amount(nil), do: "0.00"
