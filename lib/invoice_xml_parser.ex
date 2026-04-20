@@ -251,7 +251,7 @@ defmodule BillingCore.InvoiceXmlParser do
       "4" -> "IVA 15%"
       "10" -> "IVA 13%"
       "6" -> "No objeto de impuesto"
-      "7" -> "Excento de Iva"
+      "7" -> "Exento de IVA"
       _ -> code
     end
   end

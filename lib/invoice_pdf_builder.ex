@@ -143,22 +143,22 @@ defmodule BillingCore.InvoicePdfBuilder do
       |> Pdf.text_at({430, 750}, invoice.environment)
       |> Pdf.text_at({490, 760}, "Emisión", bold: true)
       |> Pdf.text_at({490, 750}, invoice.emssion_type)
-      |> Pdf.text_at({310, 730}, "Número de Autorización", bold: true)
-      |> Pdf.text_at({310, 720}, invoice.access_key)
+      |> Pdf.text_at({310, 735}, "Número de Autorización", bold: true)
       |> add_bar_code(bar_code_path)
+      |> Pdf.text_at({311, 700}, invoice.access_key)
       # ── Horizontal divider below header ─────────────────────────────
       |> Pdf.set_line_width(0.3)
-      |> Pdf.line({50, 705}, {width - 50, 705})
+      |> Pdf.line({50, 695}, {width - 50, 695})
       |> Pdf.stroke()
       # ── Client title ─────────────────────────────────────────────────
       |> Pdf.set_font_size(8)
-      |> Pdf.text_at({50, 693}, "Cliente", bold: true)
+      |> Pdf.text_at({50, 680}, "Cliente", bold: true)
       # ── Business name ────────────────────────────────────────────────
       |> Pdf.set_font_size(9)
-      |> Pdf.text_at({310, 693}, invoice.business_name, bold: true)
+      |> Pdf.text_at({310, 680}, invoice.business_name, bold: true)
       |> Pdf.set_font_size(7)
       # ── Client mini-table (left, no border) ──────────────────────────
-      |> Pdf.table({50, 685}, {260, 60}, client_table,
+      |> Pdf.table({50, 672}, {260, 60}, client_table,
            padding: 2, border: 0,
            cols: [
              [width: 115, bold: true, font_size: 7],
@@ -168,7 +168,7 @@ defmodule BillingCore.InvoicePdfBuilder do
 
     # ── Business mini-table (right, no border, aligned to x=310) ─────
     {pdf, _} =
-      Pdf.table(pdf, {310, 685}, {240, 72}, business_table,
+      Pdf.table(pdf, {310, 672}, {240, 72}, business_table,
         padding: 2, border: 0,
         cols: [
           [width: 115, bold: true, font_size: 7],
@@ -179,7 +179,7 @@ defmodule BillingCore.InvoicePdfBuilder do
     # ── Horizontal divider below client/business ─────────────────────
     pdf
     |> Pdf.set_line_width(0.3)
-    |> Pdf.line({50, 610}, {width - 50, 610})
+    |> Pdf.line({50, 600}, {width - 50, 600})
     |> Pdf.stroke()
   end
 
@@ -292,7 +292,7 @@ defmodule BillingCore.InvoicePdfBuilder do
   defp add_bar_code(pdf, nil), do: pdf
 
   defp add_bar_code(pdf, image_path) do
-    Pdf.add_image(pdf, {310, 703}, image_path, width: 242, height: 22)
+    Pdf.add_image(pdf, {310, 705}, image_path, width: 242, height: 28)
   end
 
   defp format_amount(nil), do: "0.00"
