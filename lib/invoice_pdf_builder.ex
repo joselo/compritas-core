@@ -32,19 +32,19 @@ defmodule BillingCore.InvoicePdfBuilder do
     subtotals_by_rate =
       Enum.map(document.taxes, fn tax ->
         label = String.replace(tax.tax_label, "IVA", "SUBTOTAL")
-        [label, tax.tax_value]
+        [label, format_amount(tax.tax_value)]
       end)
 
-    subtotal_sin_impuesto = [["SUBTOTAL SIN IMPUESTO", document.sub_total_without_taxes]]
+    subtotal_sin_impuesto = [["SUBTOTAL SIN IMPUESTO", format_amount(document.sub_total_without_taxes)]]
 
-    descuento = [["DESCUENTO", document.total_discount]]
+    descuento = [["DESCUENTO", format_amount(document.total_discount)]]
 
     iva_by_rate =
       Enum.map(document.taxes, fn tax ->
-        [tax.tax_label, tax.tax_total]
+        [tax.tax_label, format_amount(tax.tax_total)]
       end)
 
-    grand_total = [["Total", document.total]]
+    grand_total = [["Total", format_amount(document.total)]]
 
     totals_table =
       subtotals_by_rate ++
@@ -53,11 +53,25 @@ defmodule BillingCore.InvoicePdfBuilder do
         iva_by_rate ++
         grand_total
 
+    # Format numeric columns in items table (indices 4-7: precio, cantidad, descuento, total)
+    # Row 0 is headers — skip it
+    [header | item_rows] = document.items
+
+    formatted_items =
+      [header | Enum.map(item_rows, fn row ->
+        row
+        |> List.update_at(4, &format_amount/1)
+        |> List.update_at(5, &format_amount/1)
+        |> List.update_at(6, &format_amount/1)
+        |> List.update_at(7, &format_amount/1)
+      end)]
+
     document =
       document
       |> Map.put(:auth_datetime, xml_map.authorization_date)
       |> Map.put(:totals_table, totals_table)
       |> Map.put(:totals_row_count, length(totals_table))
+      |> Map.put(:items, formatted_items)
 
     {:ok, pdf} = Pdf.new(size: :a4, compress: false)
 
@@ -226,5 +240,41 @@ defmodule BillingCore.InvoicePdfBuilder do
     else
       pdf
     end
+  end
+
+  defp format_amount(nil), do: "0.00"
+
+  defp format_amount(value) when is_binary(value) do
+    case String.split(value, ".") do
+      [integer_part, decimal_part] ->
+        formatted = integer_part |> format_integer_part()
+        "#{formatted}.#{decimal_part}"
+
+      [integer_part] ->
+        format_integer_part(integer_part)
+    end
+  end
+
+  defp format_amount(value), do: to_string(value)
+
+  defp format_integer_part(integer_str) do
+    {sign, digits} =
+      if String.starts_with?(integer_str, "-") do
+        {"-", String.slice(integer_str, 1..-1//1)}
+      else
+        {"", integer_str}
+      end
+
+    formatted =
+      digits
+      |> String.graphemes()
+      |> Enum.reverse()
+      |> Enum.chunk_every(3)
+      |> Enum.join(",")
+      |> String.graphemes()
+      |> Enum.reverse()
+      |> Enum.join()
+
+    "#{sign}#{formatted}"
   end
 end
