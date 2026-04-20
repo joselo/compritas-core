@@ -8,7 +8,8 @@ defmodule BillingCore.InvoicePdfBuilder do
     cols: [
       [width: 50, font_size: 7],
       [width: 50, font_size: 7],
-      [width: 200, font_size: 7],
+      [width: 140, font_size: 7],
+      [width: 60, font_size: 7],
       [width: 50, align: :right, font_size: 7],
       [width: 50, align: :right, font_size: 7],
       [width: 50, align: :right, font_size: 7],

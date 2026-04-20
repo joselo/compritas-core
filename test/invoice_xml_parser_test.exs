@@ -18,13 +18,14 @@ defmodule BillingCore.InvoiceXmlParserTest do
         "Código",
         "Código Aux.",
         "Descripción",
+        "Detalle Adic.",
         "Precio Unitario",
         "Cantidad",
         "Descuento",
         "Total"
       ],
-      ["1", "1", "Metal Gear Solid V\nMetal Gear Solid V", "0.22", "1.0", "0.00", "0.22"],
-      ["1", "1", "Shipping\nGlovo", "2.50", "1.0", "0.00", "2.50"]
+      ["1", "1", "Metal Gear Solid V", "", "0.22", "1.0", "0.00", "0.22"],
+      ["1", "1", "Shipping", "", "2.50", "1.0", "0.00", "2.50"]
     ]
 
     assert InvoiceXmlParser.get_items(xml_invoice) == expected

@@ -7,6 +7,7 @@ defmodule BillingCore.InvoiceXmlParser do
     "Código",
     "Código Aux.",
     "Descripción",
+    "Detalle Adic.",
     "Precio Unitario",
     "Cantidad",
     "Descuento",
@@ -69,10 +70,27 @@ defmodule BillingCore.InvoiceXmlParser do
     details = xml_struct["factura"]["#content"]["detalles"]["detalle"]
 
     get_details_fn = fn item ->
+      det_adicional_node = item["detallesAdicionales"]["detAdicional"]
+
+      det_adicionales =
+        cond do
+          is_list(det_adicional_node) -> det_adicional_node
+          is_map(det_adicional_node) -> [det_adicional_node]
+          true -> []
+        end
+
+      extra_text =
+        det_adicionales
+        |> Enum.reject(fn det -> det["-nombre"] == "informacionAdicional" end)
+        |> Enum.map(fn det -> det["-valor"] end)
+        |> Enum.reject(&is_nil/1)
+        |> Enum.join("\n")
+
       [
         item["codigoPrincipal"],
         item["codigoAuxiliar"],
-        "#{item["descripcion"]}\n#{item["detallesAdicionales"]["detAdicional"]["-valor"]}",
+        item["descripcion"],
+        extra_text,
         item["precioUnitario"],
         item["cantidad"],
         item["descuento"],
