@@ -155,24 +155,24 @@ defmodule BillingCore.InvoicePdfBuilder do
       |> Pdf.text_at({50, 693}, "Cliente", bold: true)
       # ── Business name ────────────────────────────────────────────────
       |> Pdf.set_font_size(9)
-      |> Pdf.text_at({325, 693}, invoice.business_name, bold: true)
+      |> Pdf.text_at({310, 693}, invoice.business_name, bold: true)
       |> Pdf.set_font_size(7)
-      # ── Client mini-table (left) ─────────────────────────────────────
+      # ── Client mini-table (left, no border) ──────────────────────────
       |> Pdf.table({50, 685}, {260, 60}, client_table,
-           padding: 2, border: 0.1,
+           padding: 2, border: 0,
            cols: [
              [width: 115, bold: true, font_size: 7],
              [width: 145, font_size: 7]
            ]
          )
 
-    # ── Business mini-table (right) ──────────────────────────────────
+    # ── Business mini-table (right, no border, aligned to x=310) ─────
     {pdf, _} =
-      Pdf.table(pdf, {325, 685}, {225, 72}, business_table,
-        padding: 2, border: 0.1,
+      Pdf.table(pdf, {310, 685}, {240, 72}, business_table,
+        padding: 2, border: 0,
         cols: [
           [width: 115, bold: true, font_size: 7],
-          [width: 110, font_size: 7]
+          [width: 125, font_size: 7]
         ]
       )
 
@@ -289,12 +289,10 @@ defmodule BillingCore.InvoicePdfBuilder do
     Pdf.add_image(pdf, {50, 700}, image_path, height: 100)
   end
 
+  defp add_bar_code(pdf, nil), do: pdf
+
   defp add_bar_code(pdf, image_path) do
-    if image_path do
-      Pdf.add_image(pdf, {304, 700}, image_path, width: 253, height: 15)
-    else
-      pdf
-    end
+    Pdf.add_image(pdf, {310, 703}, image_path, width: 242, height: 22)
   end
 
   defp format_amount(nil), do: "0.00"
