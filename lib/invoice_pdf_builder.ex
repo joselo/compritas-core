@@ -29,29 +29,35 @@ defmodule BillingCore.InvoicePdfBuilder do
   def build(xml_map, logo_path \\ nil, bar_code_path \\ nil) do
     document = xml_map.document
 
-    subtotal = [
-      ["Subtotal", document.sub_total_without_taxes]
-    ]
-
-    taxes =
+    subtotals_by_rate =
       Enum.map(document.taxes, fn tax ->
-        [
-          tax.tax_label,
-          tax.tax_total
-        ]
+        label = String.replace(tax.tax_label, "IVA", "SUBTOTAL")
+        [label, tax.tax_value]
       end)
 
-    totals = [
-      ["Descuento", document.total_discount],
-      ["Total", document.total]
-    ]
+    subtotal_sin_impuesto = [["SUBTOTAL SIN IMPUESTO", document.sub_total_without_taxes]]
 
-    totals_table = subtotal ++ taxes ++ totals
+    descuento = [["DESCUENTO", document.total_discount]]
+
+    iva_by_rate =
+      Enum.map(document.taxes, fn tax ->
+        [tax.tax_label, tax.tax_total]
+      end)
+
+    grand_total = [["Total", document.total]]
+
+    totals_table =
+      subtotals_by_rate ++
+        subtotal_sin_impuesto ++
+        descuento ++
+        iva_by_rate ++
+        grand_total
 
     document =
       document
       |> Map.put(:auth_datetime, xml_map.authorization_date)
       |> Map.put(:totals_table, totals_table)
+      |> Map.put(:totals_row_count, length(totals_table))
 
     {:ok, pdf} = Pdf.new(size: :a4, compress: false)
 
@@ -163,15 +169,21 @@ defmodule BillingCore.InvoicePdfBuilder do
       |> Pdf.text_at({50, payment_cursor - 50}, "Total: #{invoice.payments.total}")
 
     # Totals
+    row_count = Map.get(invoice, :totals_row_count, 5)
+    totals_height = max(row_count * 14, 60)
+    last_row_index = row_count
 
     {pdf, _grid} =
-      Pdf.table(pdf, {400, cursor}, {150, 150}, invoice.totals_table,
+      Pdf.table(pdf, {400, cursor}, {150, totals_height}, invoice.totals_table,
         padding: 2,
         border: 0.1,
         cols: [
           [width: 220, bold: true],
           [width: 220, align: :right]
-        ]
+        ],
+        rows: %{
+          last_row_index => [bold: true, background: :gainsboro]
+        }
       )
 
     Pdf.text_wrap!(pdf, {20, 100}, {width - 40, 20}, "Página #{page_number}", align: :center)
