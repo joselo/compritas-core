@@ -36,7 +36,7 @@ defmodule BillingCore.InvoicePdfBuilder do
         [label, format_amount(tax.tax_value, symbol)]
       end)
 
-    subtotal_sin_impuesto = [["SUBTOTAL SIN IMPUESTO", format_amount(document.sub_total_without_taxes, symbol)]]
+    subtotal_sin_impuesto = [["SUBTOTAL S/IMP.", format_amount(document.sub_total_without_taxes, symbol)]]
 
     descuento = [["DESCUENTO", format_amount(document.total_discount, symbol)]]
 
@@ -73,6 +73,7 @@ defmodule BillingCore.InvoicePdfBuilder do
       |> Map.put(:totals_table, totals_table)
       |> Map.put(:totals_row_count, length(totals_table))
       |> Map.put(:items, formatted_items)
+      |> Map.put(:currency_symbol, symbol)
 
     {:ok, pdf} = Pdf.new(size: :a4, compress: false)
 
@@ -105,88 +106,133 @@ defmodule BillingCore.InvoicePdfBuilder do
   end
 
   defp add_header(pdf, invoice, logo_path, bar_code_path) do
-    %{width: _width, height: _height} = Pdf.size(pdf)
+    %{width: width, height: _height} = Pdf.size(pdf)
 
+    contribuyente_especial =
+      if is_nil(invoice.accounting_number), do: "NO", else: "SI"
+
+    client_table = [
+      ["Razón Social/Nombres y Apellidos:", invoice.client_name],
+      ["RUC/CI:", invoice.client_identification],
+      ["Correo Electrónico:", Map.get(invoice, :client_email, "")],
+      ["Dirección:", Map.get(invoice, :client_address, "")]
+    ]
+
+    business_table = [
+      ["Razón social:", invoice.tradename],
+      ["Dirección Matriz:", invoice.business_main_address],
+      ["Dirección Sucursal:", invoice.business_branch_address],
+      ["Obligado a llevar contabilidad:", invoice.accounting],
+      ["Contribuyente Especial:", contribuyente_especial]
+    ]
+
+    {pdf, _} =
+      pdf
+      |> Pdf.set_font("Helvetica", 10)
+      |> Pdf.set_font_size(7)
+      # ── Logo / FACTURA badge ────────────────────────────────────────
+      |> add_logo(logo_path)
+      # ── Invoice meta (top-right) ────────────────────────────────────
+      |> Pdf.text_at({310, 790}, "Factura Nro.", bold: true)
+      |> Pdf.text_at({310, 780}, invoice.invoice_number)
+      |> Pdf.text_at({430, 790}, "R.U.C.", bold: true)
+      |> Pdf.text_at({430, 780}, invoice.business_identification)
+      |> Pdf.text_at({310, 760}, "Fecha de Autorización", bold: true)
+      |> Pdf.text_at({310, 750}, "#{invoice.auth_datetime}")
+      |> Pdf.text_at({430, 760}, "Ambiente", bold: true)
+      |> Pdf.text_at({430, 750}, invoice.environment)
+      |> Pdf.text_at({490, 760}, "Emisión", bold: true)
+      |> Pdf.text_at({490, 750}, invoice.emssion_type)
+      |> Pdf.text_at({310, 730}, "Número de Autorización", bold: true)
+      |> Pdf.text_at({310, 720}, invoice.access_key)
+      |> add_bar_code(bar_code_path)
+      # ── Horizontal divider below header ─────────────────────────────
+      |> Pdf.set_line_width(0.3)
+      |> Pdf.line({50, 705}, {width - 50, 705})
+      |> Pdf.stroke()
+      # ── Client title ─────────────────────────────────────────────────
+      |> Pdf.set_font_size(8)
+      |> Pdf.text_at({50, 693}, "Cliente", bold: true)
+      # ── Business name ────────────────────────────────────────────────
+      |> Pdf.set_font_size(9)
+      |> Pdf.text_at({325, 693}, invoice.business_name, bold: true)
+      |> Pdf.set_font_size(7)
+      # ── Client mini-table (left) ─────────────────────────────────────
+      |> Pdf.table({50, 685}, {260, 60}, client_table,
+           padding: 2, border: 0.1,
+           cols: [
+             [width: 115, bold: true, font_size: 7],
+             [width: 145, font_size: 7]
+           ]
+         )
+
+    # ── Business mini-table (right) ──────────────────────────────────
+    {pdf, _} =
+      Pdf.table(pdf, {325, 685}, {225, 72}, business_table,
+        padding: 2, border: 0.1,
+        cols: [
+          [width: 115, bold: true, font_size: 7],
+          [width: 110, font_size: 7]
+        ]
+      )
+
+    # ── Horizontal divider below client/business ─────────────────────
     pdf
-    |> Pdf.set_font("Helvetica", 10)
-    # Business Info
-    |> Pdf.set_font_size(7)
-    # Guides
-    # |> Pdf.rectangle({310, 700}, {240, 100})
-    # |> Pdf.rectangle({310, 700}, {120, 100})
-    # |> Pdf.rectangle({430, 700}, {60, 100})
-    # |> Pdf.rectangle({50, 580}, {240, 100})
-    # |> Pdf.rectangle({310, 580}, {240, 100})
-    # |> Pdf.rectangle({370, 625}, {180, 20})
-    # |> Pdf.rectangle({370, 605}, {180, 20})
-    # |> Pdf.stroke()
-    # End Guides
-    # Logo
-    |> add_logo(logo_path)
-    # Invoice
-    |> Pdf.text_at({310, 790}, "Factura Nro.", bold: true)
-    |> Pdf.text_at({310, 780}, invoice.invoice_number)
-    |> Pdf.text_at({430, 790}, "R.U.C.", bold: true)
-    |> Pdf.text_at({430, 780}, invoice.business_identification)
-    |> Pdf.text_at({310, 760}, "Fecha de Autorización", bold: true)
-    |> Pdf.text_at({310, 750}, "#{invoice.auth_datetime}")
-    |> Pdf.text_at({430, 760}, "Ambiente", bold: true)
-    |> Pdf.text_at({430, 750}, invoice.environment)
-    |> Pdf.text_at({490, 760}, "Emisión", bold: true)
-    |> Pdf.text_at({490, 750}, invoice.emssion_type)
-    |> Pdf.text_at({310, 730}, "Número de Autorización", bold: true)
-    |> Pdf.text_at({310, 720}, invoice.access_key)
-    |> add_bar_code(bar_code_path)
-    # Client
-    |> Pdf.text_at({50, 670}, "Cliente", bold: true)
-    |> Pdf.text_at({50, 650}, invoice.client_name)
-    |> Pdf.text_at({50, 640}, invoice.client_identification)
-    |> Pdf.text_at({50, 630}, Map.get(invoice, :client_email, ""))
-    |> Pdf.text_wrap!({50, 620}, {240, 50}, Map.get(invoice, :client_address, ""))
-    # Business
-    |> Pdf.text_at({310, 670}, invoice.business_name, bold: true)
-    |> Pdf.text_at({310, 660}, invoice.tradename, bold: true)
-    |> Pdf.text_at({310, 640}, "Matriz:", bold: true)
-    |> Pdf.text_wrap!({370, 645}, {180, 20}, invoice.business_main_address)
-    |> Pdf.text_at({310, 620}, "Sucursal:", bold: true)
-    |> Pdf.text_wrap!({370, 625}, {180, 20}, invoice.business_branch_address)
-    |> Pdf.text_at({310, 590}, "Obligado a llevar contabilidad: #{invoice.accounting}")
-    |> add_accounting_number(invoice)
+    |> Pdf.set_line_width(0.3)
+    |> Pdf.line({50, 610}, {width - 50, 610})
+    |> Pdf.stroke()
   end
 
   defp add_footer(pdf, invoice) do
     %{width: width, height: _height} = Pdf.size(pdf)
-    # items_bottom: exact cursor after items table — totals table starts here (no gap)
     items_bottom = Pdf.cursor(pdf)
-    # text_cursor: with a small margin for left-side text sections
     text_cursor = items_bottom - 20
     page_number = "#{Pdf.page_number(pdf)}"
+    symbol = Map.get(invoice, :currency_symbol, "")
 
-    pdf =
-      pdf
-      |> Pdf.set_font_size(7)
+    pdf = Pdf.set_font_size(pdf, 7)
 
+    # ── Info Adicional (left, above payment) ─────────────────────────
     {pdf, payment_cursor} =
       if Map.get(invoice, :other_info, []) != [] do
         pdf =
           pdf
+          |> Pdf.set_font_size(8)
           |> Pdf.text_at({50, text_cursor}, "Información Adicional", bold: true)
-          |> Pdf.text_wrap!({50, text_cursor - 10}, {240, 60}, Enum.join(invoice.other_info, "\n"))
+          |> Pdf.set_font_size(7)
+          |> Pdf.text_wrap!({50, text_cursor - 12}, {240, 60}, Enum.join(invoice.other_info, "\n"))
         {pdf, text_cursor - 80}
       else
         {pdf, text_cursor}
       end
 
-    pdf =
-      pdf
-      # Payment
-      |> Pdf.text_at({50, payment_cursor}, "Forma de Pago", bold: true)
-      |> Pdf.text_at({50, payment_cursor - 20}, invoice.payments.method)
-      |> Pdf.text_at({50, payment_cursor - 30}, "Moneda: #{invoice.currency}")
-      |> Pdf.text_at({50, payment_cursor - 40}, "Plazo: #{invoice.payments.due_date}")
-      |> Pdf.text_at({50, payment_cursor - 50}, "Total: #{invoice.payments.total}")
+    # ── Payment section as a structured mini-table ────────────────────
+    payment_table = [
+      ["Forma de Pago", ""],
+      ["Método", invoice.payments.method],
+      ["Moneda", invoice.currency],
+      ["Plazo", invoice.payments.due_date],
+      ["Total", format_amount(invoice.payments.total, symbol)]
+    ]
 
-    # Totals — placed flush against the items table (items_bottom, no extra gap)
+    {pdf, _} =
+      Pdf.table(
+        pdf,
+        {50, payment_cursor},
+        {220, 70},
+        payment_table,
+        padding: 2,
+        border: 0.1,
+        cols: [
+          [width: 80, bold: true, font_size: 7],
+          [width: 140, font_size: 7]
+        ],
+        rows: %{
+          0 => [bold: true, background: :gainsboro, font_size: 8]
+        }
+      )
+
+    # ── Totals table (right, flush with items) ────────────────────────
     row_count = Map.get(invoice, :totals_row_count, 5)
     totals_height = max(row_count * 14, 60)
     last_row_index = row_count
@@ -230,12 +276,17 @@ defmodule BillingCore.InvoicePdfBuilder do
     Pdf.text_at(pdf, {310, 580}, "Contribuyente Nro: #{number}")
   end
 
+  defp add_logo(pdf, nil) do
+    # No logo provided — render a prominent FACTURA badge instead
+    pdf
+    |> Pdf.set_font("Helvetica", 28)
+    |> Pdf.text_at({50, 775}, "FACTURA", bold: true)
+    |> Pdf.set_font("Helvetica", 10)
+    |> Pdf.set_font_size(7)
+  end
+
   defp add_logo(pdf, image_path) do
-    if image_path do
-      Pdf.add_image(pdf, {50, 700}, image_path, height: 100)
-    else
-      pdf
-    end
+    Pdf.add_image(pdf, {50, 700}, image_path, height: 100)
   end
 
   defp add_bar_code(pdf, image_path) do
