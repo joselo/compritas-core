@@ -120,8 +120,8 @@ defmodule BillingCore.InvoicePdfBuilder do
     |> Pdf.text_at({50, 670}, "Cliente", bold: true)
     |> Pdf.text_at({50, 650}, invoice.client_name)
     |> Pdf.text_at({50, 640}, invoice.client_identification)
-    |> Pdf.text_at({50, 630}, invoice.client_email)
-    |> Pdf.text_wrap!({50, 620}, {240, 50}, invoice.client_address)
+    |> Pdf.text_at({50, 630}, Map.get(invoice, :client_email, ""))
+    |> Pdf.text_wrap!({50, 620}, {240, 50}, Map.get(invoice, :client_address, ""))
     # Business
     |> Pdf.text_at({310, 670}, invoice.business_name, bold: true)
     |> Pdf.text_at({310, 660}, invoice.tradename, bold: true)
@@ -141,12 +141,26 @@ defmodule BillingCore.InvoicePdfBuilder do
     pdf =
       pdf
       |> Pdf.set_font_size(7)
+
+    {pdf, payment_cursor} = 
+      if Map.get(invoice, :other_info, []) != [] do
+        pdf =
+          pdf
+          |> Pdf.text_at({50, cursor}, "Información Adicional", bold: true)
+          |> Pdf.text_wrap!({50, cursor - 10}, {240, 60}, Enum.join(invoice.other_info, "\n"))
+        {pdf, cursor - 80}
+      else
+        {pdf, cursor}
+      end
+
+    pdf =
+      pdf
       # Payment
-      |> Pdf.text_at({50, cursor}, "Forma de Pago", bold: true)
-      |> Pdf.text_at({50, cursor - 20}, invoice.payments.method)
-      |> Pdf.text_at({50, cursor - 30}, "Moneda: #{invoice.currency}")
-      |> Pdf.text_at({50, cursor - 40}, "Plazo: #{invoice.payments.due_date}")
-      |> Pdf.text_at({50, cursor - 50}, "Total: #{invoice.payments.total}")
+      |> Pdf.text_at({50, payment_cursor}, "Forma de Pago", bold: true)
+      |> Pdf.text_at({50, payment_cursor - 20}, invoice.payments.method)
+      |> Pdf.text_at({50, payment_cursor - 30}, "Moneda: #{invoice.currency}")
+      |> Pdf.text_at({50, payment_cursor - 40}, "Plazo: #{invoice.payments.due_date}")
+      |> Pdf.text_at({50, payment_cursor - 50}, "Total: #{invoice.payments.total}")
 
     # Totals
 

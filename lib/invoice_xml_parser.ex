@@ -166,9 +166,28 @@ defmodule BillingCore.InvoiceXmlParser do
   end
 
   def get_client_fields(xml_struct) do
-    xml_struct["factura"]["#content"]["infoAdicional"]["campoAdicional"]
-    |> Enum.flat_map(&determinate_client_field(&1))
-    |> Map.new()
+    campos = xml_struct["factura"]["#content"]["infoAdicional"]["campoAdicional"]
+
+    campos_list = 
+      cond do
+        is_list(campos) -> campos
+        is_map(campos) -> [campos]
+        true -> []
+      end
+
+    base_fields =
+      campos_list
+      |> Enum.flat_map(&determinate_client_field/1)
+      |> Map.new()
+
+    other_info = 
+      campos_list
+      |> Enum.filter(fn %{"-nombre" => n} -> 
+           n not in ["Dirección", "Direccion", "DIRECCION", "Correo electrónico", "Email", "E-MAIL", "Correo electronico"]
+         end)
+      |> Enum.map(fn %{"-nombre" => n, "#content" => v} -> "#{n}: #{v}" end)
+
+    Map.put(base_fields, :other_info, other_info)
   end
 
   def get_invoice_number(xml_struct) do
@@ -229,17 +248,21 @@ defmodule BillingCore.InvoiceXmlParser do
     end
   end
 
-  defp determinate_client_field(%{"#content" => address, "-nombre" => "Dirección"}) do
+  defp determinate_client_field(%{"#content" => address, "-nombre" => name})
+       when name in ["Dirección", "Direccion", "DIRECCION"] do
     %{
       client_address: String.slice(address, 0..300)
     }
   end
 
-  defp determinate_client_field(%{"#content" => email, "-nombre" => "Correo electrónico"}) do
+  defp determinate_client_field(%{"#content" => email, "-nombre" => name})
+       when name in ["Correo electrónico", "Email", "E-MAIL", "Correo electronico"] do
     %{
       client_email: email
     }
   end
+
+  defp determinate_client_field(_), do: []
 
   defp determinate_payment(%{
          "formaPago" => method,
