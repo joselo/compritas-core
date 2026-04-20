@@ -211,8 +211,16 @@ defmodule BillingCore.InvoiceXmlParser do
   end
 
   def get_taxes(xml_struct) do
-    xml_struct["factura"]["#content"]["infoFactura"]["totalConImpuestos"]["totalImpuesto"]
-    |> Enum.map(&determinate_tax(&1))
+    raw = xml_struct["factura"]["#content"]["infoFactura"]["totalConImpuestos"]["totalImpuesto"]
+
+    taxes =
+      cond do
+        is_list(raw) -> raw
+        is_map(raw) -> [raw]
+        true -> []
+      end
+
+    Enum.map(taxes, &determinate_tax(&1))
   end
 
   def get_payments(xml_struct) do
