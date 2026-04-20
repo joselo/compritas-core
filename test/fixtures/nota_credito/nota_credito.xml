@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<notaCredito id="comprobante" version="1.0.0">
+<notaCredito id="comprobante" version="1.1.0">
   <infoTributaria>
     <ambiente>2</ambiente>
     <tipoEmision>1</tipoEmision>
@@ -47,8 +47,8 @@
       <codigoInterno>00005158</codigoInterno>
       <codigoAdicional>00005158</codigoAdicional>
       <descripcion>SIKA EMPASTE EXTERIOR 20KG</descripcion>
-      <cantidad>2.0</cantidad>
-      <precioUnitario>21.25</precioUnitario>
+      <cantidad>2.000000</cantidad>
+      <precioUnitario>21.250000</precioUnitario>
       <descuento>0.00</descuento>
       <precioTotalSinImpuesto>42.50</precioTotalSinImpuesto>
       <detallesAdicionales>

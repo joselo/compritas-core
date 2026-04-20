@@ -31,7 +31,7 @@ defmodule BillingCore.Dataset.FacturaTest do
 
     doc_expected = {
       :factura,
-      %{id: "comprobante", version: "1.0.0"},
+      %{id: "comprobante", version: "1.1.0"},
       [
         InfoTributaria.to_doc(factura.info_tributaria),
         InfoFactura.to_doc(factura.info_factura),
