@@ -143,11 +143,13 @@ defmodule BillingCore.InvoiceXmlParser do
   end
 
   def get_business_main_address(xml_struct) do
-    String.slice(xml_struct["factura"]["#content"]["infoTributaria"]["dirMatriz"], 0..110)
+    address = xml_struct["factura"]["#content"]["infoTributaria"]["dirMatriz"] || ""
+    String.slice(address, 0..110)
   end
 
   def get_business_branch_address(xml_struct) do
-    String.slice(xml_struct["factura"]["#content"]["infoFactura"]["dirEstablecimiento"], 0..110)
+    address = xml_struct["factura"]["#content"]["infoFactura"]["dirEstablecimiento"] || ""
+    String.slice(address, 0..110)
   end
 
   def get_accounting(xml_struct) do
@@ -288,7 +290,7 @@ defmodule BillingCore.InvoiceXmlParser do
   defp determinate_client_field(%{"#content" => address, "-nombre" => name})
        when name in ["Dirección", "Direccion", "DIRECCION"] do
     %{
-      client_address: String.slice(address, 0..300)
+      client_address: String.slice(address || "", 0..300)
     }
   end
 
