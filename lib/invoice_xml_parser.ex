@@ -70,7 +70,8 @@ defmodule BillingCore.InvoiceXmlParser do
     details = xml_struct["factura"]["#content"]["detalles"]["detalle"]
 
     get_details_fn = fn item ->
-      det_adicional_node = item["detallesAdicionales"]["detAdicional"]
+      detalles_adicionales = item["detallesAdicionales"]
+      det_adicional_node = if is_map(detalles_adicionales), do: detalles_adicionales["detAdicional"], else: nil
 
       det_adicionales =
         cond do
@@ -81,6 +82,7 @@ defmodule BillingCore.InvoiceXmlParser do
 
       extra_text =
         det_adicionales
+        |> Enum.filter(&is_map/1)
         |> Enum.reject(fn det -> det["-nombre"] == "informacionAdicional" end)
         |> Enum.map(fn det -> det["-valor"] end)
         |> Enum.reject(&is_nil/1)
@@ -100,11 +102,17 @@ defmodule BillingCore.InvoiceXmlParser do
 
     items =
       if is_list(details) do
-        Enum.map(details, fn item ->
+        details
+        |> Enum.filter(&is_map/1)
+        |> Enum.map(fn item ->
           get_details_fn.(item)
         end)
       else
-        [get_details_fn.(details)]
+        if is_map(details) do
+          [get_details_fn.(details)]
+        else
+          []
+        end
       end
 
     [@headers | items]
@@ -166,7 +174,8 @@ defmodule BillingCore.InvoiceXmlParser do
   end
 
   def get_client_fields(xml_struct) do
-    campos = xml_struct["factura"]["#content"]["infoAdicional"]["campoAdicional"]
+    info_adicional = xml_struct["factura"]["#content"]["infoAdicional"]
+    campos = if is_map(info_adicional), do: info_adicional["campoAdicional"], else: nil
 
     campos_list = 
       cond do
@@ -211,7 +220,8 @@ defmodule BillingCore.InvoiceXmlParser do
   end
 
   def get_taxes(xml_struct) do
-    raw = xml_struct["factura"]["#content"]["infoFactura"]["totalConImpuestos"]["totalImpuesto"]
+    total_con_impuestos = xml_struct["factura"]["#content"]["infoFactura"]["totalConImpuestos"]
+    raw = if is_map(total_con_impuestos), do: total_con_impuestos["totalImpuesto"], else: nil
 
     taxes =
       cond do
@@ -224,9 +234,12 @@ defmodule BillingCore.InvoiceXmlParser do
   end
 
   def get_payments(xml_struct) do
+    info_factura = xml_struct["factura"]["#content"]["infoFactura"]
+    pagos = if is_map(info_factura), do: info_factura["pagos"], else: nil
+    pago = if is_map(pagos), do: pagos["pago"], else: nil
+
     %{
-      payments:
-        determinate_payment(xml_struct["factura"]["#content"]["infoFactura"]["pagos"]["pago"])
+      payments: determinate_payment(pago)
     }
   end
 
@@ -271,6 +284,8 @@ defmodule BillingCore.InvoiceXmlParser do
   end
 
   defp determinate_client_field(_), do: []
+
+  defp determinate_payment(nil), do: %{method: "DESCONOCIDO", total: 0, due_date: ""}
 
   defp determinate_payment(%{
          "formaPago" => method,
