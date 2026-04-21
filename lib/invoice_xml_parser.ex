@@ -38,6 +38,22 @@ defmodule BillingCore.InvoiceXmlParser do
     end
   end
 
+  def parse_xml_file(path) do
+    if File.exists?(path) do
+      File.read!(path)
+      |> XmlToMap.naive_map()
+      |> parse()
+    end
+  end
+
+  def get_client_email(xml_struct) do
+    get_client_fields(xml_struct)
+    |> Enum.find_value(fn
+      %{client_email: email} -> email
+      _ -> nil
+    end)
+  end
+
   def parse(nil) do
     nil
   end
