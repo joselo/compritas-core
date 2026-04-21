@@ -34,7 +34,6 @@ defmodule BillingCore.Dataset.Factura.Detalle do
     ])
     |> validate_required([
       :codigo_principal,
-      :codigo_auxiliar,
       :descripcion,
       :cantidad,
       :precio_unitario,
@@ -46,12 +45,10 @@ defmodule BillingCore.Dataset.Factura.Detalle do
   end
 
   def to_doc(%BillingCore.Dataset.Factura.Detalle{} = detalle, decimals \\ @decimals) do
-    {
-      :detalle,
-      nil,
+    fields =
       [
         {:codigoPrincipal, nil, detalle.codigo_principal},
-        {:codigoAuxiliar, nil, detalle.codigo_auxiliar},
+        (if detalle.codigo_auxiliar, do: {:codigoAuxiliar, nil, detalle.codigo_auxiliar}),
         {:descripcion, nil, detalle.descripcion},
         {:cantidad, nil, :erlang.float_to_binary(detalle.cantidad, decimals: 6)},
         {:precioUnitario, nil, :erlang.float_to_binary(detalle.precio_unitario, decimals: 6)},
@@ -61,7 +58,9 @@ defmodule BillingCore.Dataset.Factura.Detalle do
         {:detallesAdicionales, nil, detalles_adicionales_to_doc(detalle.detalles_adicionales)},
         {:impuestos, nil, impuestos_to_doc(detalle.impuestos)}
       ]
-    }
+      |> Enum.reject(&is_nil/1)
+
+    {:detalle, nil, fields}
   end
 
   def to_xml(%BillingCore.Dataset.Factura.Detalle{} = detalle) do
