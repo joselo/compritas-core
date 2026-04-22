@@ -208,21 +208,27 @@ defmodule BillingCore.InvoicePdfBuilder do
           pdf =
             pdf
             |> Pdf.set_font_size(8)
-            |> Pdf.text_at({50, text_cursor}, "Información Adicional", bold: true)
+            |> Pdf.text_at({55, text_cursor}, "Información Adicional", bold: true)
+            |> Pdf.set_line_width(0.1)
+            |> Pdf.line({50, text_cursor + 12}, {390, text_cursor + 12})
+            |> Pdf.line({50, text_cursor - 80}, {390, text_cursor - 80})
+            |> Pdf.line({50, text_cursor + 12}, {50, text_cursor - 80})
+            |> Pdf.line({390, text_cursor + 12}, {390, text_cursor - 80})
+            |> Pdf.stroke()
 
           other_info_table = Enum.map(other_info, fn field -> [field.name <> ":", field.value] end)
 
           {pdf, _} =
-            Pdf.table(pdf, {50, text_cursor - 12}, {350, 100}, other_info_table,
+            Pdf.table(pdf, {55, text_cursor - 10}, {330, 65}, other_info_table,
               padding: 2,
               border: 0,
               cols: [
                 [width: 90, bold: true, font_size: 7],
-                [width: 260, font_size: 7]
+                [width: 240, font_size: 7]
               ]
             )
 
-          {pdf, text_cursor - 100}
+          {pdf, text_cursor - 95}
       end
 
     # ── Payment section as a structured mini-table ────────────────────
