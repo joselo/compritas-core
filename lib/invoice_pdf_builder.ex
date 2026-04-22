@@ -36,7 +36,9 @@ defmodule BillingCore.InvoicePdfBuilder do
         [label, format_amount(tax.tax_value, symbol)]
       end)
 
-    subtotal_sin_impuesto = [["SUBTOTAL S/IMP.", format_amount(document.sub_total_without_taxes, symbol)]]
+    subtotal_sin_impuesto = [
+      ["SUBTOTAL S/IMP.", format_amount(document.sub_total_without_taxes, symbol)]
+    ]
 
     descuento = [["DESCUENTO", format_amount(document.total_discount, symbol)]]
 
@@ -59,13 +61,16 @@ defmodule BillingCore.InvoicePdfBuilder do
     [header | item_rows] = document.items
 
     formatted_items =
-      [header | Enum.map(item_rows, fn row ->
-        row
-        |> List.update_at(4, &format_amount(&1, symbol))
-        |> List.update_at(5, &format_amount/1)
-        |> List.update_at(6, &format_amount(&1, symbol))
-        |> List.update_at(7, &format_amount(&1, symbol))
-      end)]
+      [
+        header
+        | Enum.map(item_rows, fn row ->
+            row
+            |> List.update_at(4, &format_amount(&1, symbol))
+            |> List.update_at(5, &format_amount/1)
+            |> List.update_at(6, &format_amount(&1, symbol))
+            |> List.update_at(7, &format_amount(&1, symbol))
+          end)
+      ]
 
     document =
       document
@@ -114,7 +119,6 @@ defmodule BillingCore.InvoicePdfBuilder do
     client_table = [
       ["Razón Social/Nombres y Apellidos:", invoice.client_name],
       ["RUC/CI:", invoice.client_identification],
-      ["Correo Electrónico:", Map.get(invoice, :client_email, "")],
       ["Dirección:", Map.get(invoice, :client_address, "")]
     ]
 
@@ -159,17 +163,19 @@ defmodule BillingCore.InvoicePdfBuilder do
       |> Pdf.set_font_size(7)
       # ── Client mini-table (left, no border) ──────────────────────────
       |> Pdf.table({50, 672}, {260, 60}, client_table,
-           padding: 2, border: 0,
-           cols: [
-             [width: 115, bold: true, font_size: 7],
-             [width: 145, font_size: 7]
-           ]
-         )
+        padding: 2,
+        border: 0,
+        cols: [
+          [width: 115, bold: true, font_size: 7],
+          [width: 145, font_size: 7]
+        ]
+      )
 
     # ── Business mini-table (right, no border, aligned to x=310) ─────
     {pdf, _} =
       Pdf.table(pdf, {310, 672}, {240, 72}, business_table,
-        padding: 2, border: 0,
+        padding: 2,
+        border: 0,
         cols: [
           [width: 115, bold: true, font_size: 7],
           [width: 125, font_size: 7]
@@ -200,7 +206,12 @@ defmodule BillingCore.InvoicePdfBuilder do
           |> Pdf.set_font_size(8)
           |> Pdf.text_at({50, text_cursor}, "Información Adicional", bold: true)
           |> Pdf.set_font_size(7)
-          |> Pdf.text_wrap!({50, text_cursor - 12}, {240, 60}, Enum.join(invoice.other_info, "\n"))
+          |> Pdf.text_wrap!(
+            {50, text_cursor - 12},
+            {240, 60},
+            Enum.join(invoice.other_info, "\n")
+          )
+
         {pdf, text_cursor - 80}
       else
         {pdf, text_cursor}
@@ -268,12 +279,6 @@ defmodule BillingCore.InvoicePdfBuilder do
 
   defp render_table(pdf, %{items: items}) do
     Pdf.table(pdf, {50, 560}, {500, 350}, items, @table_opts)
-  end
-
-  defp add_accounting_number(pdf, %{accounting_number: nil}), do: pdf
-
-  defp add_accounting_number(pdf, %{accounting_number: number}) do
-    Pdf.text_at(pdf, {310, 580}, "Contribuyente Nro: #{number}")
   end
 
   defp add_logo(pdf, nil) do

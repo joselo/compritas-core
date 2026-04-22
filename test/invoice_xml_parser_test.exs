@@ -91,8 +91,7 @@ defmodule BillingCore.InvoiceXmlParserTest do
   test "get_client_fields/1 returns 'infoAdicional#first'", %{xml_invoice: xml_invoice} do
     assert InvoiceXmlParser.get_client_fields(xml_invoice) == %{
              client_address: "The other side",
-             client_email: "jim@doors.com",
-             other_info: []
+             other_info: ["Correo electrónico: jim@doors.com"]
            }
   end
 
