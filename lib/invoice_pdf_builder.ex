@@ -200,21 +200,29 @@ defmodule BillingCore.InvoicePdfBuilder do
 
     # ── Info Adicional (left, above payment) ─────────────────────────
     {pdf, payment_cursor} =
-      if Map.get(invoice, :other_info, []) != [] do
-        pdf =
-          pdf
-          |> Pdf.set_font_size(8)
-          |> Pdf.text_at({50, text_cursor}, "Información Adicional", bold: true)
-          |> Pdf.set_font_size(7)
-          |> Pdf.text_wrap!(
-            {50, text_cursor - 12},
-            {240, 60},
-            Enum.join(invoice.other_info, "\n")
-          )
+      case Map.get(invoice, :other_info, []) do
+        [] ->
+          {pdf, text_cursor}
 
-        {pdf, text_cursor - 80}
-      else
-        {pdf, text_cursor}
+        other_info ->
+          pdf =
+            pdf
+            |> Pdf.set_font_size(8)
+            |> Pdf.text_at({50, text_cursor}, "Información Adicional", bold: true)
+
+          other_info_table = Enum.map(other_info, fn field -> [field.name <> ":", field.value] end)
+
+          {pdf, _} =
+            Pdf.table(pdf, {50, text_cursor - 12}, {350, 100}, other_info_table,
+              padding: 2,
+              border: 0,
+              cols: [
+                [width: 90, bold: true, font_size: 7],
+                [width: 260, font_size: 7]
+              ]
+            )
+
+          {pdf, text_cursor - 100}
       end
 
     # ── Payment section as a structured mini-table ────────────────────

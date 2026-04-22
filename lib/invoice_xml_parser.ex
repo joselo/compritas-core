@@ -198,7 +198,7 @@ defmodule BillingCore.InvoiceXmlParser do
       |> Enum.filter(fn %{"-nombre" => n} ->
         n not in ["Dirección", "Direccion", "DIRECCION"]
       end)
-      |> Enum.map(fn %{"-nombre" => n, "#content" => v} -> "#{n}: #{v}" end)
+      |> Enum.map(fn %{"-nombre" => n, "#content" => v} -> %{name: n, value: to_string(v)} end)
 
     Map.put(base_fields, :other_info, other_info)
   end
