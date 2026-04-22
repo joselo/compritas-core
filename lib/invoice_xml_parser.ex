@@ -53,6 +53,7 @@ defmodule BillingCore.InvoiceXmlParser do
       accounting_number: get_accounting_number(xml_invoice),
       client_name: get_client_name(xml_invoice),
       client_identification: get_client_identification(xml_invoice),
+      client_address: get_client_address(xml_invoice),
       business_identification: get_business_identification(xml_invoice),
       access_key: get_access_key(xml_invoice),
       environment: get_environment(xml_invoice),
@@ -177,6 +178,10 @@ defmodule BillingCore.InvoiceXmlParser do
     xml_struct["factura"]["#content"]["infoFactura"]["identificacionComprador"]
   end
 
+  def get_client_address(xml_struct) do
+    xml_struct["factura"]["#content"]["infoFactura"]["direccionComprador"]
+  end
+
   def get_client_fields(xml_struct) do
     info_adicional = xml_struct["factura"]["#content"]["infoAdicional"]
     campos = if is_map(info_adicional), do: info_adicional["campoAdicional"], else: nil
@@ -188,19 +193,11 @@ defmodule BillingCore.InvoiceXmlParser do
         true -> []
       end
 
-    base_fields =
-      campos_list
-      |> Enum.flat_map(&determinate_client_field/1)
-      |> Map.new()
-
     other_info =
       campos_list
-      |> Enum.filter(fn %{"-nombre" => n} ->
-        n not in ["Dirección", "Direccion", "DIRECCION"]
-      end)
       |> Enum.map(fn %{"-nombre" => n, "#content" => v} -> %{name: n, value: to_string(v)} end)
 
-    Map.put(base_fields, :other_info, other_info)
+    Map.put(%{}, :other_info, other_info)
   end
 
   def get_invoice_number(xml_struct) do
@@ -272,15 +269,6 @@ defmodule BillingCore.InvoiceXmlParser do
       _ -> code
     end
   end
-
-  defp determinate_client_field(%{"#content" => address, "-nombre" => name})
-       when name in ["Dirección", "Direccion", "DIRECCION"] do
-    %{
-      client_address: String.slice(address || "", 0..300)
-    }
-  end
-
-  defp determinate_client_field(_), do: []
 
   defp determinate_payment(nil), do: %{method: "DESCONOCIDO", total: 0, due_date: ""}
 

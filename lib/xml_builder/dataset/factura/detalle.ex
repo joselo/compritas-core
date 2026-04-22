@@ -48,7 +48,7 @@ defmodule BillingCore.Dataset.Factura.Detalle do
     fields =
       [
         {:codigoPrincipal, nil, detalle.codigo_principal},
-        (if detalle.codigo_auxiliar, do: {:codigoAuxiliar, nil, detalle.codigo_auxiliar}),
+        if(detalle.codigo_auxiliar, do: {:codigoAuxiliar, nil, detalle.codigo_auxiliar}),
         {:descripcion, nil, detalle.descripcion},
         {:cantidad, nil, :erlang.float_to_binary(detalle.cantidad, decimals: 6)},
         {:precioUnitario, nil, :erlang.float_to_binary(detalle.precio_unitario, decimals: 6)},

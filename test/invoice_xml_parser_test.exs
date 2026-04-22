@@ -71,6 +71,10 @@ defmodule BillingCore.InvoiceXmlParserTest do
     assert InvoiceXmlParser.get_client_identification(xml_invoice) == "1111111111"
   end
 
+  test "get_client_address/1 returns 'direccionComprador'", %{xml_invoice: xml_invoice} do
+    assert InvoiceXmlParser.get_client_address(xml_invoice) == "The other side"
+  end
+
   test "get_access_key/1 returns 'claveAcceso'", %{xml_invoice: xml_invoice} do
     assert InvoiceXmlParser.get_access_key(xml_invoice) ==
              "0206202101111111111100110010017965080853956024310"
@@ -90,7 +94,6 @@ defmodule BillingCore.InvoiceXmlParserTest do
 
   test "get_client_fields/1 returns 'infoAdicional#first'", %{xml_invoice: xml_invoice} do
     assert InvoiceXmlParser.get_client_fields(xml_invoice) == %{
-             client_address: "The other side",
              other_info: [%{name: "Correo electrónico", value: "jim@doors.com"}]
            }
   end

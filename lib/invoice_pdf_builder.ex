@@ -119,7 +119,7 @@ defmodule BillingCore.InvoicePdfBuilder do
     client_table = [
       ["Razón Social/Nombres y Apellidos:", invoice.client_name],
       ["RUC/CI:", invoice.client_identification],
-      ["Dirección:", Map.get(invoice, :client_address, "")]
+      ["Dirección:", invoice.client_address]
     ]
 
     business_table = [
@@ -216,7 +216,8 @@ defmodule BillingCore.InvoicePdfBuilder do
             |> Pdf.line({390, text_cursor + 12}, {390, text_cursor - 80})
             |> Pdf.stroke()
 
-          other_info_table = Enum.map(other_info, fn field -> [field.name <> ":", field.value] end)
+          other_info_table =
+            Enum.map(other_info, fn field -> [field.name <> ":", field.value] end)
 
           {pdf, _} =
             Pdf.table(pdf, {55, text_cursor - 10}, {330, 65}, other_info_table,

@@ -59,6 +59,7 @@ defmodule BillingCore.Dataset.Factura.Test.FactorySupport do
       tipo_identificacion_comprador: 8,
       razon_social_comprador: "Novaux Inc.",
       identificacion_comprador: 465_219_513,
+      direccion_comprador: "Quito",
       total_sin_impuestos: 3000.00,
       total_descuento: 0.00,
       total_con_impuestos: [total_impuesto_factory()],

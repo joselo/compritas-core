@@ -16,6 +16,7 @@ defmodule BillingCore.Dataset.Factura.InfoFactura do
     field(:tipo_identificacion_comprador, :integer)
     field(:razon_social_comprador, :string)
     field(:identificacion_comprador, :string)
+    field(:direccion_comprador, :string)
     field(:total_sin_impuestos, :float)
     field(:total_descuento, :float)
     field(:propina, :float)
@@ -36,6 +37,7 @@ defmodule BillingCore.Dataset.Factura.InfoFactura do
       :tipo_identificacion_comprador,
       :razon_social_comprador,
       :identificacion_comprador,
+      :direccion_comprador,
       :total_sin_impuestos,
       :total_descuento,
       :propina,
@@ -71,6 +73,7 @@ defmodule BillingCore.Dataset.Factura.InfoFactura do
          |> String.pad_leading(2, "0")},
         {:razonSocialComprador, nil, info_factura.razon_social_comprador},
         {:identificacionComprador, nil, info_factura.identificacion_comprador},
+        {:direccionComprador, nil, info_factura.direccion_comprador},
         {:totalSinImpuestos, nil,
          :erlang.float_to_binary(info_factura.total_sin_impuestos, decimals: decimals)},
         {:totalDescuento, nil,
